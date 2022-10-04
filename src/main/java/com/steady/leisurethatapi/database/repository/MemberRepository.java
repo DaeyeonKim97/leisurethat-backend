@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Integer> {
     public Member findByUsername(String username);
+    public int countByUsername(String username);
+    public int countByEmail(String email);
 }
