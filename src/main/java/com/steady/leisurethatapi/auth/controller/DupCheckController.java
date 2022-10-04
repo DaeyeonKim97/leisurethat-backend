@@ -55,7 +55,7 @@ public class DupCheckController {
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         Map<String, Object> responseMap = new HashMap<>();
 
-        int result = memberRepository.countByUsername(emailDTO.getEmail());
+        int result = memberRepository.countByEmail(emailDTO.getEmail());
         responseMap.put("email", emailDTO.getEmail());
 
         if (result != 0){
