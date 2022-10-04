@@ -3,6 +3,9 @@ package com.steady.leisurethatapi.auth.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.Email;
 
 @Data
 @AllArgsConstructor
@@ -10,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class SignUpDTO {
     private String username;
     private String password;
+    @Email
     private String email;
     private String name;
 }
