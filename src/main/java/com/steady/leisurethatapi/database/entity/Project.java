@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Data
 @AllArgsConstructor
@@ -27,6 +28,10 @@ public class Project {
     private int id;
     @Column(name = "PROJECT_NAME")
     private String name;
+    @Column(name = "PROJECT_START_DATE")
+    private Date startDate;
+    @Column(name = "PROJECT_END_DATE")
+    private Date endDate;
     @Column(name = "PROJECT_TARGET_AMOUNT")
     private int targetAmount;
     @Column(name = "PROJECT_URL")
@@ -48,4 +53,10 @@ public class Project {
     @OneToOne
     @JoinColumn(name = "ATC_ID")
     private Attachment attachment;
+    @Column(name = "PROJECT_REFUND_POLICY")
+    private String refundPolicy;
+    @Column(name = "PROJECT_INQUIRY_EMAIL")
+    private String inquiryEmail;
+    @Column(name = "PROJECT_INQUIRY_PHONE")
+    private String inquiryPhone;
 }
