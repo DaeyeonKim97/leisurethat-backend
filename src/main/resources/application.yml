@@ -25,3 +25,7 @@ jwt:
   secret: leisurethatthatthatleisure
   access-token-validity-in-seconds: 7200 #2 hours
   refresh-token-validity-in-seconds : 43200 # 12 hours
+
+#Toss Secret Key
+key:
+  SECRET: "test_sk_D4yKeq5bgrpmoOaRLyX8GX0lzW6Y:"
