@@ -1,11 +1,14 @@
 package com.steady.leisurethatapi.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * <pre>
@@ -52,10 +55,10 @@ public class Calculate {
     private long preAmount;
 
     @Column(name = "CAL_BALANCE")
-    private long balance;
+    private Integer balance;
 
     @Column(name = "CAL_POST_AMOUNT")
-    private long postAmount;
+    private Integer postAmount;
 
     @Column(name = "CAL_GIVE_DATE")
     private Date giveDate;

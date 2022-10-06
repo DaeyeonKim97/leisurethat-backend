@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * <pre>
@@ -52,7 +52,7 @@ public class Payment {
     private int paymentCount;
 
     @Column(name="PAYMENT_STATUS")
-    private String paymentStatue;
+    private String paymentStatus;
 
     @Column(name="PAYMENT_RESERVE_DATE")
     private Date paymentReserveDate;

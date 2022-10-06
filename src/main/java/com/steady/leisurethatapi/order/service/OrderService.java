@@ -55,10 +55,6 @@ public class OrderService {
             paymentList = paymentRepository.findAllByOrderProjectIdAndOrderStatus(projectId, orderStatus, pageable);
         }
 
-        paymentList.forEach(payment -> {
-            System.out.println("있니?" + payment);
-        });
-
         List<OrderInfoDTO> cancleList = new ArrayList<>();
 
         //람다식

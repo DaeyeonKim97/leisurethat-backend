@@ -1,7 +1,9 @@
 package com.steady.leisurethatapi.calculate.controller;
 
+import com.steady.leisurethatapi.calculate.dto.CalculateAmountResultDTO;
 import com.steady.leisurethatapi.calculate.dto.CalculateApplicationStatusDTO;
 import com.steady.leisurethatapi.calculate.service.CalculateService;
+import com.steady.leisurethatapi.common.dto.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -45,8 +47,9 @@ public class CalculateController {
         this.calculateService = calculateService;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<?> getCalculateApplicationList(@RequestParam("projectId") int projectId, @RequestParam("offset") int offset) {
+    @GetMapping("")
+    public ResponseEntity<?> getCalculateApplicationList(@RequestParam("projectId") int projectId, @RequestParam(name="offset", defaultValue = "0") int offset) {
+
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
@@ -55,10 +58,18 @@ public class CalculateController {
         Pageable pageable = PageRequest.of(offset, 6, Sort.by("id").descending());
 
         List<CalculateApplicationStatusDTO> calculateApplicationList = calculateService.selectCalculateApplicationList(projectId, pageable);
+        CalculateAmountResultDTO calculateAmount = calculateService.selectCalculateAmount(projectId);
+        double excludingFees = calculateAmount.getActualAmount() * 0.95;
 
+        responseMap.put("totalAmount", calculateAmount.getTotal());
+        responseMap.put("actualAmount", calculateAmount.getActualAmount());
+        responseMap.put("preAmount", excludingFees * 0.8);
+        responseMap.put("postAmount", excludingFees * 0.2);
+        responseMap.put("calculateList", calculateApplicationList);
 
-
-
-        return null;
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new ResponseMessage(200, "calculateList search success", responseMap));
     }
 }
