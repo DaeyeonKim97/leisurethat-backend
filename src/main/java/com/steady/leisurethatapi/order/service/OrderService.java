@@ -41,21 +41,18 @@ public class OrderService {
         this.paymentRepository = paymentRepository;
         this.orderDeliveryRepositroy = orderDeliveryRepositroy;
     }
-    public List<OrderInfoDTO> selectOrderCancleList(int projectId, int id, String sponserName, int offset) {
+    public List<OrderInfoDTO> selectOrderCancleList(int projectId, int id, String sponserName, String orderStatus, Pageable pageable) {
 
-        String orderStatus = "주문 취소";
-        System.out.println("서버 열렸냐?");
-        Pageable pageable = PageRequest.of(offset, 6, Sort.by("order.id").descending());
         List<Payment> paymentList = null;
 //        paymentList = paymentList = paymentRepository.findAllByOrderProjectIdAndOrderOrderStatus(projectId, orderStatus, pageable);
         if(id > 0 && sponserName != null){
-            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderOrderStatusAndOrderIdAndOrderMemberName(projectId, orderStatus, id, sponserName, pageable);
+            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderStatusAndOrderIdAndOrderMemberName(projectId, orderStatus, id, sponserName, pageable);
         } else if (id > 0) {
-            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderOrderStatusAndOrderId(projectId, orderStatus, id, pageable);
+            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderStatusAndOrderId(projectId, orderStatus, id, pageable);
         } else if(sponserName != null) {
-            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderOrderStatusAndOrderMemberName(projectId, orderStatus, sponserName, pageable);
+            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderStatusAndOrderMemberName(projectId, orderStatus, sponserName, pageable);
         } else {
-            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderOrderStatus(projectId, orderStatus, pageable);
+            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderStatus(projectId, orderStatus, pageable);
         }
 
         paymentList.forEach(payment -> {

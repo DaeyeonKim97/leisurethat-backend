@@ -26,10 +26,9 @@ import java.util.List;
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 
 
-    public List<Payment> findAllByOrderProjectIdAndOrderOrderStatusAndOrderIdAndOrderMemberName(int projectId, String orderStatus, int id,String sponserName, Pageable pageable);
-    public List<Payment> findAllByOrderProjectIdAndOrderOrderStatusAndOrderId(int projectId, String orderStatus, int id, Pageable pageable);
-    public List<Payment> findAllByOrderProjectIdAndOrderOrderStatusAndOrderMemberName(int projectId, String orderStatus, String sponserName, Pageable pageable);
-
-    public List<Payment> findAllByOrderProjectIdAndOrderOrderStatus(int projectId, String orderStatus, Pageable pageable);
+    public List<Payment> findAllByOrderProjectIdAndOrderStatusAndOrderIdAndOrderMemberName(int projectId, String orderStatus, int id,String sponserName, Pageable pageable);
+    public List<Payment> findAllByOrderProjectIdAndOrderStatusAndOrderId(int projectId, String orderStatus, int id, Pageable pageable);
+    public List<Payment> findAllByOrderProjectIdAndOrderStatusAndOrderMemberName(int projectId, String orderStatus, String sponserName, Pageable pageable);
+    public List<Payment> findAllByOrderProjectIdAndOrderStatus(int projectId, String orderStatus, Pageable pageable);
 
 }
