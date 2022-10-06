@@ -1,0 +1,87 @@
+package com.steady.leisurethatapi.order.controller;
+
+import com.steady.leisurethatapi.common.dto.ResponseMessage;
+import com.steady.leisurethatapi.order.dto.OrderInfoDTO;
+import com.steady.leisurethatapi.order.dto.OrderUserInfoDTO;
+import com.steady.leisurethatapi.order.service.OrderService;
+import org.apache.coyote.Response;
+import org.hibernate.criterion.Order;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * <pre>
+ * Class : OrderController
+ * Comment: 주문 컨트롤러
+ * History
+ * ================================================================
+ * DATE             AUTHOR           NOTE
+ * ----------------------------------------------------------------
+ * 2022-10-04       전현정           최초 생성
+ * </pre>
+ *
+ * @author 전현정(최초 작성자)
+ * @version 1(클래스 버전)
+ */
+@RestController
+@RequestMapping("/order")
+public class OrderController {
+
+    private final OrderService orderService;
+
+    @Autowired
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @GetMapping("/cancled")
+    public ResponseEntity<?> getOrderCancleList(@RequestParam("projectId") int projectId, @RequestParam(value="sponserName", required = false) String sponserName, @RequestParam(value="id", defaultValue = "0") int id,
+                                                                 @RequestParam(value="offset", defaultValue="0") int offset) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String,Object> responseMap = new HashMap<>();
+
+        List<OrderInfoDTO> cancleList = orderService.selectOrderCancleList(projectId, id, sponserName, offset);
+
+        responseMap.put("cancleList", cancleList);
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new ResponseMessage(200, "order cancle list search success", responseMap));
+    }
+
+
+
+    @GetMapping("/{id}/user")
+    public ResponseEntity<?> getOrderCancleUserInfo(@PathVariable("id") int id) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String,Object> responseMap = new HashMap<>();
+
+        OrderUserInfoDTO userInfo = orderService.selectOrderCancleUserInfoByOrderId(id);
+
+        System.out.println(userInfo);
+
+        responseMap.put("userInfo", userInfo);
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new ResponseMessage(200, "order cancle userinfo search success", responseMap));
+    }
+
+
+
+
+
+}
