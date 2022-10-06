@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Table(name = "TBL_PROJECT_CATEGORY")
 public class ProjectCategory {
     @Id
-    @Column(name = "TBL_CATEGORY_ID")
+    @Column(name = "PROJECT_CATEGORY_ID")
     private int id;
     @Column(name = "PROJECT_CATEGORY_NAME")
     private String name;
