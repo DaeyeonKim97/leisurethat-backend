@@ -15,7 +15,8 @@ import java.sql.Date;
 @Table(name = "TBL_STORY")
 @SequenceGenerator(
         name = "SEQ_STORY_ID_GENERATOR",
-        sequenceName = "SEQ_STORY_ID"
+        sequenceName = "SEQ_STORY_ID",
+        allocationSize = 1
 )
 public class Story {
     @Id

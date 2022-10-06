@@ -14,7 +14,8 @@ import java.sql.Date;
 @Table(name = "TBL_ORDER")
 @SequenceGenerator(
         name = "SEQ_ORDER_ID_GENERATOR",
-        sequenceName = "SEQ_ORDER_ID"
+        sequenceName = "SEQ_ORDER_ID",
+        allocationSize = 1
 )
 public class Order {
     @Id
