@@ -42,4 +42,6 @@ public class Reward {
     @ManyToOne
     @JoinColumn(name = "PROJECT_ID")
     private Project project;
+    @Column(name = "REWARD_CONTENT")
+    private String content;
 }
