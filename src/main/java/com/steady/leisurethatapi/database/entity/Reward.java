@@ -25,6 +25,8 @@ public class Reward {
     )
     @Column(name = "REWARD_ID")
     private int id;
+    @Column(name = "REWARD_PRICE")
+    private int price;
     @Column(name = "REWARD_TITLE")
     private String title;
     @Column(name = "REWARD_SERVE_COUNT")
