@@ -7,8 +7,8 @@ spring:
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
     url: jdbc:oracle:thin:@metaverse.ohgiraffers.com:1521/xe
-    username: C##LEISURETHAT_TEST
-    password: LEISURETHAT
+    username: C##LEISURETHAT_dykim
+    password: leisurethat
 #    url: jdbc:oracle:thin:@leisurethat_low?TNS_ADMIN=./src/main/resources/Wallet_leisurethat
 #    username: LEISURETHAT
 #    password: OracleOracle123
@@ -27,7 +27,6 @@ spring:
 logging:
   level:
     com.amazonaws.util.EC2MetadataUtils: error
-
 
 jwt:
   header: Authorization
