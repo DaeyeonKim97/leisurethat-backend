@@ -33,4 +33,4 @@ build/
 .vscode/
 
 Wallet_leisurethat
-aws-config.yml
+**/application-*.yml
