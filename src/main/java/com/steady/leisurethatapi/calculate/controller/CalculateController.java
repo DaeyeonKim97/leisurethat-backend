@@ -1,7 +1,9 @@
 package com.steady.leisurethatapi.calculate.controller;
 
 import com.steady.leisurethatapi.calculate.dto.CalculateAmountResultDTO;
+import com.steady.leisurethatapi.calculate.dto.CalculateApplicationResponseDTO;
 import com.steady.leisurethatapi.calculate.dto.CalculateApplicationStatusDTO;
+import com.steady.leisurethatapi.calculate.dto.CalculateRejectResponseDTO;
 import com.steady.leisurethatapi.calculate.service.CalculateService;
 import com.steady.leisurethatapi.common.dto.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -71,5 +70,39 @@ public class CalculateController {
                 .ok()
                 .headers(headers)
                 .body(new ResponseMessage(200, "calculateList search success", responseMap));
+    }
+
+    @GetMapping("/{id}/reject")
+    public ResponseEntity<?> getCalculateRejectReason(@PathVariable("id") int id) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String,Object> responseMap = new HashMap<>();
+
+        int judgeId = calculateService.selectJudgeId(id).getJudge().getId();
+
+        CalculateRejectResponseDTO rejectReason = calculateService.selectRejectInfo(judgeId);
+        responseMap.put("rejectReason", rejectReason);
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new ResponseMessage(200, "reject reason search success", responseMap));
+    }
+
+    @GetMapping("/{id}/detail")
+    public ResponseEntity<?> getCalculateApplicationDetail(@PathVariable("id") int id) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String,Object> responseMap = new HashMap<>();
+
+        CalculateApplicationResponseDTO calculateApplication = calculateService.selectCalculateApplicationById(id);
+        responseMap.put("calculateDetail",calculateApplication);
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new ResponseMessage(200, "calculateDetail search success", responseMap));
     }
 }

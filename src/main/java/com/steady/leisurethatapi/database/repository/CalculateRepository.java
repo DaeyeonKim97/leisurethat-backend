@@ -25,5 +25,7 @@ import java.util.List;
 public interface CalculateRepository extends JpaRepository<Calculate, Integer> {
 
 
-    List<Calculate> findAllByJudgeProjectId(int projectId, Pageable pageable);
+    public List<Calculate> findAllByJudgeProjectId(int projectId, Pageable pageable);
+
+    public Calculate findById(int id);
 }

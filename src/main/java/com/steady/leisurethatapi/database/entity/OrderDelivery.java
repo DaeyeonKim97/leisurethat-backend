@@ -53,7 +53,7 @@ public class OrderDelivery {
     private Delivery delivery;
 
     @Column(name="DELIVERY_STATUS")
-    private String delivertStatus;
+    private String deliveryStatus;
 
     @Column(name="COURIER_ID")
     private int courierId;
