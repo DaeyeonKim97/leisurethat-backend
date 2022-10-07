@@ -31,9 +31,9 @@ public class Story {
     private Project project;
     @Column(name = "STORY_TITLE")
     private String title;
-    @Lob
+//    @Lob
     @Column(name = "STORY_CONTENT")
-    private Blob content;
+    private String content;
     @Column(name = "STORY_VIEWS")
     private int views;
     @Column(name = "STORY_DATE")
