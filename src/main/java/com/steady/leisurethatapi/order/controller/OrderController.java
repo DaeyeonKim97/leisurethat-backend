@@ -7,7 +7,9 @@ import com.steady.leisurethatapi.order.service.OrderService;
 import org.apache.coyote.Response;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +52,12 @@ public class OrderController {
         headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
         Map<String,Object> responseMap = new HashMap<>();
 
-        List<OrderInfoDTO> cancleList = orderService.selectOrderCancleList(projectId, id, sponserName, offset);
+        String orderStatus = "주문 취소";
+        Pageable pageable = PageRequest.of(offset, 6, Sort.by("order.id").descending());
+
+
+        List<OrderInfoDTO> cancleList = orderService.selectOrderCancleList(projectId, id, sponserName, orderStatus, pageable);
+
 
         responseMap.put("cancleList", cancleList);
         return ResponseEntity

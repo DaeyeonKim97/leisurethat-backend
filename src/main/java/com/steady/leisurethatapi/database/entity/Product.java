@@ -32,4 +32,6 @@ public class Product {
     @OneToOne
     @JoinColumn(name = "ATC_ID")
     private Attachment attachment;
+    @Column(name = "PRODUCT_DETAIL")
+    private String detail;
 }

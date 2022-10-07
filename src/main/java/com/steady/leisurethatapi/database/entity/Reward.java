@@ -25,6 +25,8 @@ public class Reward {
     )
     @Column(name = "REWARD_ID")
     private int id;
+    @Column(name = "REWARD_PRICE")
+    private int price;
     @Column(name = "REWARD_TITLE")
     private String title;
     @Column(name = "REWARD_SERVE_COUNT")
@@ -40,4 +42,6 @@ public class Reward {
     @ManyToOne
     @JoinColumn(name = "PROJECT_ID")
     private Project project;
+    @Column(name = "REWARD_CONTENT")
+    private String content;
 }
