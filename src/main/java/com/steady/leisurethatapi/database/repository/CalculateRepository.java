@@ -2,6 +2,7 @@ package com.steady.leisurethatapi.database.repository;
 
 import com.steady.leisurethatapi.database.entity.Calculate;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -24,8 +25,7 @@ import java.util.List;
 
 public interface CalculateRepository extends JpaRepository<Calculate, Integer> {
 
-
     public List<Calculate> findAllByJudgeProjectId(int projectId, Pageable pageable);
-
+    public List<Calculate> findAllByJudgeProjectId(int projectId, Sort sort);
     public Calculate findById(int id);
 }

@@ -1,9 +1,6 @@
 package com.steady.leisurethatapi.calculate.controller;
 
-import com.steady.leisurethatapi.calculate.dto.CalculateAmountResultDTO;
-import com.steady.leisurethatapi.calculate.dto.CalculateApplicationResponseDTO;
-import com.steady.leisurethatapi.calculate.dto.CalculateApplicationStatusDTO;
-import com.steady.leisurethatapi.calculate.dto.CalculateRejectResponseDTO;
+import com.steady.leisurethatapi.calculate.dto.*;
 import com.steady.leisurethatapi.calculate.service.CalculateService;
 import com.steady.leisurethatapi.common.dto.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,5 +101,77 @@ public class CalculateController {
                 .ok()
                 .headers(headers)
                 .body(new ResponseMessage(200, "calculateDetail search success", responseMap));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<?> getCaculateList(@RequestParam(value = "projectName", required = false) String projectName,
+                                             @RequestParam(value = "makerId", required = false) Integer makerId,
+                                             @RequestParam(value = "state", required = false) String state,
+                                             @RequestParam(value = "offset", defaultValue="0") int offset) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String,Object> responseMap = new HashMap<>();
+
+        Pageable pageable = PageRequest.of(offset, 6, Sort.by("id").descending());
+
+        List<CalculateListReponseDTO> calculateList = calculateService.selectCalculateList(pageable);
+
+        responseMap.put("calculateList", calculateList);
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new ResponseMessage(200, "calculate list search success", responseMap));
+    }
+
+    @GetMapping("/{id}/maker")
+    public ResponseEntity<?> getMakerByCalculateId(@PathVariable("id") int id) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String,Object> responseMap = new HashMap<>();
+
+        MakerInfoDTO makerInfo = calculateService.selectMakerInfo(id);
+
+        responseMap.put("makerInfo", makerInfo);
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new ResponseMessage(200, "calculate application maker info search success", responseMap));
+    }
+
+    @GetMapping("/project/{id}")
+    public ResponseEntity<?> getCaculateListByProjectId(@PathVariable("id") int id) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        Map<String, Object> responseMap = new HashMap<>();
+
+        List<CalculateListReponseDTO> calculateList = calculateService.selectCalculateListByProjectId(id);
+
+        responseMap.put("calculateList", calculateList);
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new ResponseMessage(200, "calculate list by project id search success", responseMap));
+    }
+
+    @GetMapping("{id}/project")
+    public ResponseEntity<?> getProjectByCalculateId(@PathVariable("id") int id) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        Map<String, Object> responseMap = new HashMap<>();
+
+        CalculateProjectInfoDTO projectInfo = calculateService.selectCalculateProjectInfoByCalculateId(id);
+        responseMap.put("projectInfo", projectInfo);
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new ResponseMessage(200, "project search success", responseMap));
     }
 }

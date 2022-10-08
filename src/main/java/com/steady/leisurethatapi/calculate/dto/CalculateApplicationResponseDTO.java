@@ -18,6 +18,7 @@ package com.steady.leisurethatapi.calculate.dto;
 public class CalculateApplicationResponseDTO {
 
     private String projectName;
+    private int projectId;
     private String makerUserName;
     private String calculateRound;
     private String calculateStatus;
@@ -27,12 +28,14 @@ public class CalculateApplicationResponseDTO {
     private long deliveryOngoingCount;      //배송중
     private long deliveryOnCallCount;       //배송대기중
     private long totalDeliveryCount;        //총 배송 건수
-    private long calculateAmount;
+    private long calculateAmount;           //신청 금액
+    private long totalAmount;               //실 결제금액(총 모집금액)
 
     public CalculateApplicationResponseDTO() {}
 
-    public CalculateApplicationResponseDTO(String projectName, String makerUserName, String calculateRound, String calculateStatus, String category, String atcDownload, long deliveryCompleteCount, long deliveryOngoingCount, long deliveryOnCallCount, long totalDeliveryCount, long calculateAmount) {
+    public CalculateApplicationResponseDTO(String projectName, int projectId, String makerUserName, String calculateRound, String calculateStatus, String category, String atcDownload, long deliveryCompleteCount, long deliveryOngoingCount, long deliveryOnCallCount, long totalDeliveryCount, long calculateAmount, long totalAmount) {
         this.projectName = projectName;
+        this.projectId = projectId;
         this.makerUserName = makerUserName;
         this.calculateRound = calculateRound;
         this.calculateStatus = calculateStatus;
@@ -43,6 +46,7 @@ public class CalculateApplicationResponseDTO {
         this.deliveryOnCallCount = deliveryOnCallCount;
         this.totalDeliveryCount = totalDeliveryCount;
         this.calculateAmount = calculateAmount;
+        this.totalAmount = totalAmount;
     }
 
     public String getProjectName() {
@@ -51,6 +55,14 @@ public class CalculateApplicationResponseDTO {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
+    }
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
     }
 
     public String getMakerUserName() {
@@ -133,10 +145,19 @@ public class CalculateApplicationResponseDTO {
         this.calculateAmount = calculateAmount;
     }
 
+    public long getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(long totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
     @Override
     public String toString() {
         return "CalculateApplicationResponseDTO{" +
                 "projectName='" + projectName + '\'' +
+                ", projectId=" + projectId +
                 ", makerUserName='" + makerUserName + '\'' +
                 ", calculateRound='" + calculateRound + '\'' +
                 ", calculateStatus='" + calculateStatus + '\'' +
@@ -147,6 +168,7 @@ public class CalculateApplicationResponseDTO {
                 ", deliveryOnCallCount=" + deliveryOnCallCount +
                 ", totalDeliveryCount=" + totalDeliveryCount +
                 ", calculateAmount=" + calculateAmount +
+                ", totalAmount=" + totalAmount +
                 '}';
     }
 }
