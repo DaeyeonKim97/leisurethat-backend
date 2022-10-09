@@ -1,9 +1,6 @@
 package com.steady.leisurethatapi.project.manage.service;
 
-import com.steady.leisurethatapi.database.entity.Product;
-import com.steady.leisurethatapi.database.entity.Project;
-import com.steady.leisurethatapi.database.entity.Reward;
-import com.steady.leisurethatapi.database.entity.Story;
+import com.steady.leisurethatapi.database.entity.*;
 import com.steady.leisurethatapi.database.repository.ProductRepository;
 import com.steady.leisurethatapi.database.repository.ProjectRepository;
 import com.steady.leisurethatapi.database.repository.RewardRepository;
@@ -63,6 +60,21 @@ public class ProjectDetailService {
         response.setStoryList(storyListResponse);
         response.setRewardList(rewardListResponse);
         response.setProductList(productListResponse);
+
+        return response;
+    }
+
+    public MakerDetailResponseDTO getMakerDetail(int projectId){
+        MakerDetailResponseDTO response = new MakerDetailResponseDTO();
+        Project project = projectRepository.findById(projectId);
+        Member member = project.getBusinessInfo().getMember();
+        response.setMember(new MemberResponseDTO(member));
+        List<Project> projectList = projectRepository.findByBusinessInfoMemberUsername(member.getUsername());
+        List<ProjectResponseDTO> projectListResponse = new ArrayList<>();
+        for(Project projectItem : projectList){
+            projectListResponse.add(new ProjectResponseDTO(projectItem));
+        }
+        response.setProjectList(projectListResponse);
 
         return response;
     }

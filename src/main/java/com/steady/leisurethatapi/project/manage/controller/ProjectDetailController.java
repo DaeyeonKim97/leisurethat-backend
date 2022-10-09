@@ -4,6 +4,7 @@ import com.steady.leisurethatapi.common.dto.ResponseMessage;
 import com.steady.leisurethatapi.database.entity.Member;
 import com.steady.leisurethatapi.database.entity.Project;
 import com.steady.leisurethatapi.database.repository.*;
+import com.steady.leisurethatapi.project.manage.dto.MakerDetailResponseDTO;
 import com.steady.leisurethatapi.project.manage.dto.ProjectDetailResponseDTO;
 import com.steady.leisurethatapi.project.manage.service.ProjectDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,20 @@ public class ProjectDetailController {
 
         ProjectDetailResponseDTO projectDetailResponse = projectDetailService.getProjectDetail(projectId);
         responseMap.put("project", projectDetailResponse);
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseMessage(200,"success",responseMap));
+    }
+
+    @GetMapping("{projectId}/maker")
+    public ResponseEntity<?> getMakerDetailInfo(@PathVariable int projectId){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String , Object> responseMap = new HashMap<>();
+
+        MakerDetailResponseDTO maker = projectDetailService.getMakerDetail(projectId);
+        responseMap.put("maker",maker);
 
         return ResponseEntity
                 .ok()
