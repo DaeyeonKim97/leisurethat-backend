@@ -1,10 +1,7 @@
 package com.steady.leisurethatapi.project.manage.service;
 
 import com.steady.leisurethatapi.database.entity.*;
-import com.steady.leisurethatapi.database.repository.ProductRepository;
-import com.steady.leisurethatapi.database.repository.ProjectRepository;
-import com.steady.leisurethatapi.database.repository.RewardRepository;
-import com.steady.leisurethatapi.database.repository.StoryRepository;
+import com.steady.leisurethatapi.database.repository.*;
 import com.steady.leisurethatapi.project.manage.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +15,15 @@ public class ProjectDetailService {
     private final StoryRepository storyRepository;
     private final RewardRepository rewardRepository;
     private final ProductRepository productRepository;
+    private final PaymentRepository paymentRepository;
 
     @Autowired
-    public ProjectDetailService(ProjectRepository projectRepository, StoryRepository storyRepository, RewardRepository rewardRepository, ProductRepository productRepository) {
+    public ProjectDetailService(ProjectRepository projectRepository, StoryRepository storyRepository, RewardRepository rewardRepository, ProductRepository productRepository, PaymentRepository paymentRepository) {
         this.projectRepository = projectRepository;
         this.storyRepository = storyRepository;
         this.rewardRepository = rewardRepository;
         this.productRepository = productRepository;
+        this.paymentRepository = paymentRepository;
     }
 
     public ProjectDetailResponseDTO getProjectDetail(int projectId){
@@ -75,6 +74,16 @@ public class ProjectDetailService {
             projectListResponse.add(new ProjectResponseDTO(projectItem));
         }
         response.setProjectList(projectListResponse);
+
+        return response;
+    }
+
+    public List<PaymentResponseDTO> getParticipantDetailInfo(int projectId){
+        List<PaymentResponseDTO> response = new ArrayList<>();
+        List<Payment> paymentList = paymentRepository.findByOrderProjectId(projectId);
+        for(Payment payment : paymentList){
+            response.add(new PaymentResponseDTO(payment));
+        }
 
         return response;
     }

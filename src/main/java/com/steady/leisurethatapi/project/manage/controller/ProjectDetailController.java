@@ -5,6 +5,7 @@ import com.steady.leisurethatapi.database.entity.Member;
 import com.steady.leisurethatapi.database.entity.Project;
 import com.steady.leisurethatapi.database.repository.*;
 import com.steady.leisurethatapi.project.manage.dto.MakerDetailResponseDTO;
+import com.steady.leisurethatapi.project.manage.dto.PaymentResponseDTO;
 import com.steady.leisurethatapi.project.manage.dto.ProjectDetailResponseDTO;
 import com.steady.leisurethatapi.project.manage.service.ProjectDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.awt.print.Pageable;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -80,6 +83,20 @@ public class ProjectDetailController {
 
         MakerDetailResponseDTO maker = projectDetailService.getMakerDetail(projectId);
         responseMap.put("maker",maker);
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseMessage(200,"success",responseMap));
+    }
+
+    @GetMapping("{projectId}/participant")
+    public ResponseEntity<?> getParticipantDetailInfo(@PathVariable int projectId){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String , Object> responseMap = new HashMap<>();
+
+        List<PaymentResponseDTO> paymentList = projectDetailService.getParticipantDetailInfo(projectId);
+        responseMap.put("paymentList",paymentList);
 
         return ResponseEntity
                 .ok()
