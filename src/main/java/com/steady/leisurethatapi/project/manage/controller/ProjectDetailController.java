@@ -1,7 +1,11 @@
 package com.steady.leisurethatapi.project.manage.controller;
 
+import com.steady.leisurethatapi.common.dto.ResponseMessage;
+import com.steady.leisurethatapi.database.entity.Member;
 import com.steady.leisurethatapi.database.entity.Project;
 import com.steady.leisurethatapi.database.repository.*;
+import com.steady.leisurethatapi.project.manage.dto.ProjectDetailResponseDTO;
+import com.steady.leisurethatapi.project.manage.service.ProjectDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -23,22 +27,17 @@ public class ProjectDetailController {
 
     private final ProjectRepository projectRepository;
     private final MemberRepository memberRepository;
-    private final StoryRepository storyRepository;
-    private final RewardRepository rewardRepository;
-    private final OrderRepository orderRepository;
-
+    private final ProjectDetailService projectDetailService;
     @Autowired
-    public ProjectDetailController(ProjectRepository projectRepository, MemberRepository memberRepository, StoryRepository storyRepository, RewardRepository rewardRepository, OrderRepository orderRepository) {
+    public ProjectDetailController(ProjectRepository projectRepository, MemberRepository memberRepository, ProjectDetailService projectDetailService) {
         this.projectRepository = projectRepository;
         this.memberRepository = memberRepository;
-        this.storyRepository = storyRepository;
-        this.rewardRepository = rewardRepository;
-        this.orderRepository = orderRepository;
+        this.projectDetailService = projectDetailService;
     }
 
 
     @GetMapping("{projectId}")
-    public ResponseEntity<?> getProjectDetailInfo(@PathVariable int projectId, Pageable pageable){
+    public ResponseEntity<?> getProjectDetailInfo(@PathVariable int projectId){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
         Map<String , Object> responseMap = new HashMap<>();
@@ -52,17 +51,23 @@ public class ProjectDetailController {
                     .build();
         }
         Project project = projectRepository.findById(projectId);
+        Member member = memberRepository.findByUsername(username);
         if(project == null){
             return ResponseEntity
                     .badRequest()
                     .build();
         }
-        if(project.getBusinessInfo().getMember().getUsername() != username){
+        if((!(member.getRole().equals("ADMIN"))) && !(project.getBusinessInfo().getMember().getUsername().equals(username))){
             return ResponseEntity
                     .status(401)
                     .build();
         }
 
-        return null;
+        ProjectDetailResponseDTO projectDetailResponse = projectDetailService.getProjectDetail(projectId);
+        responseMap.put("project", projectDetailResponse);
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseMessage(200,"success",responseMap));
     }
 }

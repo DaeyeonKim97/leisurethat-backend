@@ -14,15 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProjectDetailResponseDTO {
-    private AccountInfoResponseDTO accountInfoResponseDTO;
-    private BusinessInfoResponseDTO businessInfoResponseDTO;
-    private MemberResponseDTO memberResponseDTO;
-    private List<ProductResponseDTO> productResponseDTOList;
-    private ProjectResponseDTO projectResponseDTO;
-    private List<RewardResponseDTO> rewardResponseDTOList;
-    private List<StoryResponseDTO> storyResponseDTOList;
-
-    public ProjectDetailResponseDTO(Project project, List<Story> story, List<Product> product, List<Reward> reward){
-
-    }
+    private AccountInfoResponseDTO accountInfo;
+    private BusinessInfoResponseDTO businessInfo;
+    private MemberResponseDTO member;
+    private ProjectResponseDTO project;
+    private List<ProductResponseDTO> productList;
+    private List<RewardResponseDTO> rewardList;
+    private List<StoryResponseDTO> storyList;
 }
