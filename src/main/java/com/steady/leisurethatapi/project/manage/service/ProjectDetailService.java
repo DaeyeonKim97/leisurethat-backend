@@ -4,6 +4,7 @@ import com.steady.leisurethatapi.database.entity.*;
 import com.steady.leisurethatapi.database.repository.*;
 import com.steady.leisurethatapi.project.manage.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,14 +17,16 @@ public class ProjectDetailService {
     private final RewardRepository rewardRepository;
     private final ProductRepository productRepository;
     private final PaymentRepository paymentRepository;
+    private final OrderRepository orderRepository;
 
     @Autowired
-    public ProjectDetailService(ProjectRepository projectRepository, StoryRepository storyRepository, RewardRepository rewardRepository, ProductRepository productRepository, PaymentRepository paymentRepository) {
+    public ProjectDetailService(ProjectRepository projectRepository, StoryRepository storyRepository, RewardRepository rewardRepository, ProductRepository productRepository, PaymentRepository paymentRepository, OrderRepository orderRepository) {
         this.projectRepository = projectRepository;
         this.storyRepository = storyRepository;
         this.rewardRepository = rewardRepository;
         this.productRepository = productRepository;
         this.paymentRepository = paymentRepository;
+        this.orderRepository = orderRepository;
     }
 
     public ProjectDetailResponseDTO getProjectDetail(int projectId){
@@ -83,6 +86,22 @@ public class ProjectDetailService {
         List<Payment> paymentList = paymentRepository.findByOrderProjectId(projectId);
         for(Payment payment : paymentList){
             response.add(new PaymentResponseDTO(payment));
+        }
+
+        return response;
+    }
+
+    public List<ProjectListResponseDTO> getEnrollList(Pageable pageable){
+        List<ProjectListResponseDTO> response = new ArrayList<>();
+        List<Project> projectList = projectRepository.findByStatusId(1, pageable);
+
+        for(Project project : projectList){
+            ProjectListResponseDTO item = new ProjectListResponseDTO(project);
+
+            int participantNum = orderRepository.countByProjectId(project.getId());
+            item.setParticipantNum(participantNum);
+
+            response.add(item);
         }
 
         return response;

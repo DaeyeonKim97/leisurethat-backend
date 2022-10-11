@@ -7,8 +7,10 @@ import com.steady.leisurethatapi.database.repository.*;
 import com.steady.leisurethatapi.project.manage.dto.MakerDetailResponseDTO;
 import com.steady.leisurethatapi.project.manage.dto.PaymentResponseDTO;
 import com.steady.leisurethatapi.project.manage.dto.ProjectDetailResponseDTO;
+import com.steady.leisurethatapi.project.manage.dto.ProjectListResponseDTO;
 import com.steady.leisurethatapi.project.manage.service.ProjectDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.awt.print.Pageable;
+
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,6 +99,20 @@ public class ProjectDetailController {
 
         List<PaymentResponseDTO> paymentList = projectDetailService.getParticipantDetailInfo(projectId);
         responseMap.put("paymentList",paymentList);
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseMessage(200,"success",responseMap));
+    }
+
+    @GetMapping("enroll")
+    public ResponseEntity<?> getEnrollList(Pageable pageable){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String , Object> responseMap = new HashMap<>();
+
+        List<ProjectListResponseDTO> projectList = projectDetailService.getEnrollList(pageable);
+        responseMap.put("projectList", projectList);
 
         return ResponseEntity
                 .ok()
