@@ -18,15 +18,17 @@ public class ProjectDetailService {
     private final ProductRepository productRepository;
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
+    private final ProjectStatusRepository projectStatusRepository;
 
     @Autowired
-    public ProjectDetailService(ProjectRepository projectRepository, StoryRepository storyRepository, RewardRepository rewardRepository, ProductRepository productRepository, PaymentRepository paymentRepository, OrderRepository orderRepository) {
+    public ProjectDetailService(ProjectRepository projectRepository, StoryRepository storyRepository, RewardRepository rewardRepository, ProductRepository productRepository, PaymentRepository paymentRepository, OrderRepository orderRepository, ProjectStatusRepository projectStatusRepository) {
         this.projectRepository = projectRepository;
         this.storyRepository = storyRepository;
         this.rewardRepository = rewardRepository;
         this.productRepository = productRepository;
         this.paymentRepository = paymentRepository;
         this.orderRepository = orderRepository;
+        this.projectStatusRepository = projectStatusRepository;
     }
 
     public ProjectDetailResponseDTO getProjectDetail(int projectId){
@@ -94,6 +96,54 @@ public class ProjectDetailService {
     public List<ProjectListResponseDTO> getEnrollList(Pageable pageable){
         List<ProjectListResponseDTO> response = new ArrayList<>();
         List<Project> projectList = projectRepository.findByStatusId(1, pageable);
+
+        for(Project project : projectList){
+            ProjectListResponseDTO item = new ProjectListResponseDTO(project);
+
+            int participantNum = orderRepository.countByProjectId(project.getId());
+            item.setParticipantNum(participantNum);
+
+            response.add(item);
+        }
+
+        return response;
+    }
+
+    public int admitEnroll(int projectId){
+        Project project = projectRepository.findById(projectId);
+        if(project == null){
+            return -1;
+        }
+        if(project.getStatus().getId() != 1){
+            return -2;
+        }
+
+        ProjectStatus status = projectStatusRepository.findById(3);
+        project.setStatus(status);
+        projectRepository.save(project);
+
+        return 1;
+    }
+
+    public int refuseEnroll(int projectId){
+        Project project = projectRepository.findById(projectId);
+        if(project == null){
+            return -1;
+        }
+        if(project.getStatus().getId() != 1){
+            return -2;
+        }
+
+        ProjectStatus status = projectStatusRepository.findById(2);
+        project.setStatus(status);
+        projectRepository.save(project);
+
+        return 1;
+    }
+
+    public List<ProjectListResponseDTO> getPreOpenList(Pageable pageable){
+        List<ProjectListResponseDTO> response = new ArrayList<>();
+        List<Project> projectList = projectRepository.findByStatusId(3, pageable);
 
         for(Project project : projectList){
             ProjectListResponseDTO item = new ProjectListResponseDTO(project);

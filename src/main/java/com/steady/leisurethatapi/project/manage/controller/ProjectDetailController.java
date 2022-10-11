@@ -15,12 +15,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,6 +110,58 @@ public class ProjectDetailController {
         Map<String , Object> responseMap = new HashMap<>();
 
         List<ProjectListResponseDTO> projectList = projectDetailService.getEnrollList(pageable);
+        responseMap.put("projectList", projectList);
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseMessage(200,"success",responseMap));
+    }
+
+    @PutMapping("{projectId}/enroll")
+    public ResponseEntity<?> admitEnroll(@PathVariable int projectId){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String , Object> responseMap = new HashMap<>();
+
+        int result = projectDetailService.admitEnroll(projectId);
+
+        if (result < 0){
+            return ResponseEntity
+                    .badRequest()
+                    .build();
+        }
+
+        return ResponseEntity
+                .created(URI.create("project"))
+                .build();
+    }
+
+    @DeleteMapping("{projectId}/enroll")
+    public ResponseEntity<?> refuseEnroll(@PathVariable int projectId){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String , Object> responseMap = new HashMap<>();
+
+        int result = projectDetailService.refuseEnroll(projectId);
+
+        if (result < 0){
+            return ResponseEntity
+                    .badRequest()
+                    .build();
+        }
+
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+
+    @GetMapping("preopen")
+    public ResponseEntity<?> getPreOpenList(Pageable pageable){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String , Object> responseMap = new HashMap<>();
+
+        List<ProjectListResponseDTO> projectList = projectDetailService.getPreOpenList(pageable);
         responseMap.put("projectList", projectList);
 
         return ResponseEntity
