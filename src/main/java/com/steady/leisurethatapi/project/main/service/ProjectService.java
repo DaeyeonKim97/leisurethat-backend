@@ -2,9 +2,10 @@ package com.steady.leisurethatapi.project.main.service;
 
 import com.steady.leisurethatapi.database.entity.Payment;
 import com.steady.leisurethatapi.database.entity.Project;
-import com.steady.leisurethatapi.database.repository.PaymentRepository;
-import com.steady.leisurethatapi.database.repository.ProjectRepository;
+import com.steady.leisurethatapi.database.repository.*;
 import com.steady.leisurethatapi.project.main.dto.ProjectResponseDTO;
+import com.steady.leisurethatapi.project.manage.dto.ProjectDetailResponseDTO;
+import com.steady.leisurethatapi.project.manage.service.ProjectDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,18 @@ import java.util.List;
 @Service
 public class ProjectService {
     private final ProjectRepository projectRepository;
+    private final StoryRepository storyRepository;
+    private final RewardRepository rewardRepository;
+    private final ProductRepository productRepository;
     private final PaymentRepository paymentRepository;
 
+
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, PaymentRepository paymentRepository) {
+    public ProjectService(ProjectRepository projectRepository, StoryRepository storyRepository, RewardRepository rewardRepository, ProductRepository productRepository, PaymentRepository paymentRepository) {
         this.projectRepository = projectRepository;
+        this.storyRepository = storyRepository;
+        this.rewardRepository = rewardRepository;
+        this.productRepository = productRepository;
         this.paymentRepository = paymentRepository;
     }
 
@@ -42,4 +50,5 @@ public class ProjectService {
 
         return response;
     }
+
 }
