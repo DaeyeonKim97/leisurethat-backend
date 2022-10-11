@@ -202,4 +202,36 @@ public class ProjectDetailService {
 
         return response;
     }
+
+    public int admitForgive(int projectId){
+        Project project = projectRepository.findById(projectId);
+        if(project == null){
+            return -1;
+        }
+        if(project.getStatus().getId() != 6){
+            return -2;
+        }
+
+        ProjectStatus status = projectStatusRepository.findById(7);
+        project.setStatus(status);
+        projectRepository.save(project);
+
+        return 1;
+    }
+
+    public int refuseForgive(int projectId){
+        Project project = projectRepository.findById(projectId);
+        if(project == null){
+            return -1;
+        }
+        if(project.getStatus().getId() != 6){
+            return -2;
+        }
+
+        ProjectStatus status = projectStatusRepository.findById(5);
+        project.setStatus(status);
+        projectRepository.save(project);
+
+        return 1;
+    }
 }

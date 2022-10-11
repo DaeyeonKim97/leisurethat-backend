@@ -214,4 +214,40 @@ public class ProjectDetailController {
                 .ok()
                 .body(new ResponseMessage(200,"success",responseMap));
     }
+
+    @DeleteMapping("reg-forgive/{projectId}")
+    public ResponseEntity<?> admitForgive(@PathVariable int projectId){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+
+        int result = projectDetailService.admitForgive(projectId);
+
+        if (result < 0){
+            return ResponseEntity
+                    .badRequest()
+                    .build();
+        }
+
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+
+    @PutMapping("reg-forgive/{projectId}")
+    public ResponseEntity<?> refuseForgive(@PathVariable int projectId){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+
+        int result = projectDetailService.refuseForgive(projectId);
+
+        if (result < 0){
+            return ResponseEntity
+                    .badRequest()
+                    .build();
+        }
+
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
 }
