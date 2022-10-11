@@ -200,4 +200,18 @@ public class ProjectDetailController {
                 .noContent()
                 .build();
     }
+
+    @GetMapping("reg-forgive")
+    public ResponseEntity<?> regForgiveList(Pageable pageable){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String , Object> responseMap = new HashMap<>();
+
+        List<ProjectListResponseDTO> projectList = projectDetailService.getRegForgiveList(pageable);
+        responseMap.put("projectList", projectList);
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseMessage(200,"success",responseMap));
+    }
 }

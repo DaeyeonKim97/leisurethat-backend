@@ -187,5 +187,19 @@ public class ProjectDetailService {
 
         return 1;
     }
+    public List<ProjectListResponseDTO> getRegForgiveList(Pageable pageable){
+        List<ProjectListResponseDTO> response = new ArrayList<>();
+        List<Project> projectList = projectRepository.findByStatusId(6, pageable);
 
+        for(Project project : projectList){
+            ProjectListResponseDTO item = new ProjectListResponseDTO(project);
+
+            int participantNum = orderRepository.countByProjectId(project.getId());
+            item.setParticipantNum(participantNum);
+
+            response.add(item);
+        }
+
+        return response;
+    }
 }
