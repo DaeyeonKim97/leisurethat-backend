@@ -82,7 +82,17 @@
             <artifactId>osdt_core</artifactId>
         </dependency>
         <!-- oracle cloud end -->
-
+        <!-- validity -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-aws -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-aws</artifactId>
+            <version>2.2.6.RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>

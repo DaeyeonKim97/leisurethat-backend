@@ -34,7 +34,7 @@ public class MemberDetailsServiceImpl implements MemberDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(member.getRole()));
         if((member.getRole()).equals("ADMIN")){
-            authorities.add(new SimpleGrantedAuthority("MEMBER"));
+            authorities.add(new SimpleGrantedAuthority("USER"));
         }
 
         return new org.springframework.security.core.userdetails.User(member.getUsername(), member.getPassword(),authorities);
