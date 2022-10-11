@@ -22,6 +22,7 @@ public class ProjectListResponseDTO {
     public ProjectListResponseDTO(Project project){
         this.projectId = project.getId();
         this.projectName = project.getName();
+        this.makerName = project.getBusinessInfo().getMember().getUsername();
         this.projectStatus = project.getStatus().getDescription();
         this.startDate = project.getStartDate();
         this.endDate = project.getEndDate();
