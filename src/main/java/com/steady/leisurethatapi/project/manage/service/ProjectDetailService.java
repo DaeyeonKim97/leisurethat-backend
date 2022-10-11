@@ -156,4 +156,36 @@ public class ProjectDetailService {
 
         return response;
     }
+
+    public List<ProjectListResponseDTO> getOpenList(Pageable pageable){
+        List<ProjectListResponseDTO> response = new ArrayList<>();
+        List<Project> projectList = projectRepository.findByStatusId(5, pageable);
+
+        for(Project project : projectList){
+            ProjectListResponseDTO item = new ProjectListResponseDTO(project);
+
+            int participantNum = orderRepository.countByProjectId(project.getId());
+            item.setParticipantNum(participantNum);
+
+            response.add(item);
+        }
+
+        return response;
+    }
+    public int rejectOpenProject(int projectId){
+        Project project = projectRepository.findById(projectId);
+        if(project == null){
+            return -1;
+        }
+        if(project.getStatus().getId() != 5){
+            return -2;
+        }
+
+        ProjectStatus status = projectStatusRepository.findById(8);
+        project.setStatus(status);
+        projectRepository.save(project);
+
+        return 1;
+    }
+
 }

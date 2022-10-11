@@ -117,7 +117,7 @@ public class ProjectDetailController {
                 .body(new ResponseMessage(200,"success",responseMap));
     }
 
-    @PutMapping("{projectId}/enroll")
+    @PutMapping("enroll/{projectId}")
     public ResponseEntity<?> admitEnroll(@PathVariable int projectId){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
@@ -136,7 +136,7 @@ public class ProjectDetailController {
                 .build();
     }
 
-    @DeleteMapping("{projectId}/enroll")
+    @DeleteMapping("enroll/{projectId}")
     public ResponseEntity<?> refuseEnroll(@PathVariable int projectId){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
@@ -167,5 +167,37 @@ public class ProjectDetailController {
         return ResponseEntity
                 .ok()
                 .body(new ResponseMessage(200,"success",responseMap));
+    }
+
+    @GetMapping("open")
+    public ResponseEntity<?> getOpenList(Pageable pageable){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String , Object> responseMap = new HashMap<>();
+
+        List<ProjectListResponseDTO> projectList = projectDetailService.getOpenList(pageable);
+        responseMap.put("projectList", projectList);
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseMessage(200,"success",responseMap));
+    }
+
+    @DeleteMapping("open/{projectId}")
+    public ResponseEntity<?> rejectOpenProject(@PathVariable int projectId){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+
+        int result = projectDetailService.rejectOpenProject(projectId);
+
+        if (result < 0){
+            return ResponseEntity
+                    .badRequest()
+                    .build();
+        }
+
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 }
