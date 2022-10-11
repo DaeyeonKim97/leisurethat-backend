@@ -26,7 +26,7 @@ public class ProjectController {
     @Autowired
     public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
-    }현
+    }
 
     @GetMapping
     public ResponseEntity<?> getProjectList(Pageable pageable){
