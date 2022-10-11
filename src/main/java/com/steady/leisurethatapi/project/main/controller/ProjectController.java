@@ -1,6 +1,8 @@
 package com.steady.leisurethatapi.project.main.controller;
 
 import com.steady.leisurethatapi.common.dto.ResponseMessage;
+import com.steady.leisurethatapi.database.entity.Project;
+import com.steady.leisurethatapi.database.repository.ProjectRepository;
 import com.steady.leisurethatapi.project.main.dto.ProjectResponseDTO;
 import com.steady.leisurethatapi.project.main.service.ProjectService;
 import com.steady.leisurethatapi.project.manage.dto.ProjectDetailResponseDTO;
@@ -26,11 +28,13 @@ public class ProjectController {
 
     private final ProjectService projectService;
     private final ProjectDetailService projectDetailService;
+    private final ProjectRepository projectRepository;
 
     @Autowired
-    public ProjectController(ProjectService projectService, ProjectDetailService projectDetailService) {
+    public ProjectController(ProjectService projectService, ProjectDetailService projectDetailService, ProjectRepository projectRepository) {
         this.projectService = projectService;
         this.projectDetailService = projectDetailService;
+        this.projectRepository = projectRepository;
     }
 
     @GetMapping
@@ -55,6 +59,11 @@ public class ProjectController {
 
         ProjectDetailResponseDTO projectDetailResponse = projectDetailService.getProjectDetail(projectId);
         responseMap.put("project", projectDetailResponse);
+
+        Project project = projectRepository.findById(projectId);
+        project.setViews(project.getViews() + 1);
+        projectRepository.save(project);
+
 
         return ResponseEntity
                 .ok()
