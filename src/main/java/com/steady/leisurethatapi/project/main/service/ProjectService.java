@@ -3,6 +3,7 @@ package com.steady.leisurethatapi.project.main.service;
 import com.steady.leisurethatapi.database.entity.Payment;
 import com.steady.leisurethatapi.database.entity.Project;
 import com.steady.leisurethatapi.database.repository.*;
+import com.steady.leisurethatapi.project.main.dto.PaymentSummaryDTO;
 import com.steady.leisurethatapi.project.main.dto.ProjectResponseDTO;
 import com.steady.leisurethatapi.project.manage.dto.ProjectDetailResponseDTO;
 import com.steady.leisurethatapi.project.manage.service.ProjectDetailService;
@@ -47,6 +48,13 @@ public class ProjectService {
 
             response.add(item);
         }
+
+        return response;
+    }
+
+    public PaymentSummaryDTO getPaymentSummary(int projectId){
+        List<Payment> paymentList = paymentRepository.findByOrderProjectId(projectId);
+        PaymentSummaryDTO response = new PaymentSummaryDTO(paymentList);
 
         return response;
     }

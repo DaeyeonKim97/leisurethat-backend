@@ -1,8 +1,10 @@
 package com.steady.leisurethatapi.project.main.controller;
 
 import com.steady.leisurethatapi.common.dto.ResponseMessage;
+import com.steady.leisurethatapi.database.entity.Payment;
 import com.steady.leisurethatapi.database.entity.Project;
 import com.steady.leisurethatapi.database.repository.ProjectRepository;
+import com.steady.leisurethatapi.project.main.dto.PaymentSummaryDTO;
 import com.steady.leisurethatapi.project.main.dto.ProjectResponseDTO;
 import com.steady.leisurethatapi.project.main.service.ProjectService;
 import com.steady.leisurethatapi.project.manage.dto.ProjectDetailResponseDTO;
@@ -64,6 +66,8 @@ public class ProjectController {
         project.setViews(project.getViews() + 1);
         projectRepository.save(project);
 
+        PaymentSummaryDTO paymentSummary = projectService.getPaymentSummary(projectId);
+        responseMap.put("payment",paymentSummary);
 
         return ResponseEntity
                 .ok()
