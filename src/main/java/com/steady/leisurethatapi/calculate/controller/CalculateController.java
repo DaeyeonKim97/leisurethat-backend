@@ -3,6 +3,7 @@ package com.steady.leisurethatapi.calculate.controller;
 import com.steady.leisurethatapi.calculate.dto.*;
 import com.steady.leisurethatapi.calculate.service.CalculateService;
 import com.steady.leisurethatapi.common.dto.ResponseMessage;
+import com.steady.leisurethatapi.database.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,10 +26,10 @@ import java.util.Map;
  * ================================================================
  * DATE             AUTHOR           NOTE
  * ----------------------------------------------------------------
- * 2022-10-06       홍길동           최초 생성
+ * 2022-10-06       전현정           최초 생성
  * </pre>
  *
- * @author 홍길동(최초 작성자)
+ * @author 전현정(최초 작성자)
  * @version 1(클래스 버전)
  * @see
  */
@@ -44,8 +45,7 @@ public class CalculateController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getCalculateApplicationList(@RequestParam("projectId") int projectId, @RequestParam(name="offset", defaultValue = "0") int offset) {
-
+    public ResponseEntity<?> getCalculateApplicationList(@RequestParam("projectId") int projectId, @RequestParam(name="offset", defaultValue = "0") int offset) {;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
@@ -55,13 +55,35 @@ public class CalculateController {
 
         List<CalculateApplicationStatusDTO> calculateApplicationList = calculateService.selectCalculateApplicationList(projectId, pageable);
         CalculateAmountResultDTO calculateAmount = calculateService.selectCalculateAmount(projectId);
-        double excludingFees = calculateAmount.getActualAmount() * 0.95;
+        List<DeliveryStatusCount> deliveryStatusList = calculateService.selectDeliveryStatus(projectId);
+        Project projectInfo = calculateService.selectProject(projectId);
+        int excludingFees = (int) (calculateAmount.getActualAmount() * 0.95);
+        int preAmount = (int)(excludingFees * 0.8);
+
 
         responseMap.put("totalAmount", calculateAmount.getTotal());
         responseMap.put("actualAmount", calculateAmount.getActualAmount());
-        responseMap.put("preAmount", excludingFees * 0.8);
-        responseMap.put("postAmount", excludingFees * 0.2);
+        responseMap.put("preAmount", preAmount);
+        responseMap.put("postAmount", excludingFees - preAmount);
         responseMap.put("calculateList", calculateApplicationList);
+        responseMap.put("projectName", projectInfo.getName());
+        responseMap.put("makerName", projectInfo.getAccountInfo().getBusinessInfo().getMember().getName());
+
+        CalculateApplicationResponseDTO calculateApplicationDetail = new CalculateApplicationResponseDTO();
+        deliveryStatusList.forEach(deliveryStatusCount -> {
+            if(deliveryStatusCount.getDeliveryStatus() == "배송중") {
+                calculateApplicationDetail.setDeliveryOngoingCount(deliveryStatusCount.getDeliveryStatusCount());
+            } else if(deliveryStatusCount.getDeliveryStatus() == "배송완료") {
+                calculateApplicationDetail.setDeliveryCompleteCount(deliveryStatusCount.getDeliveryStatusCount());
+            } else {
+                calculateApplicationDetail.setDeliveryOnCallCount(deliveryStatusCount.getDeliveryStatusCount());
+            }
+        });
+        responseMap.put("deliveryCompleteCount", calculateApplicationDetail.getDeliveryCompleteCount());
+        responseMap.put("deliveryOngoingCount", calculateApplicationDetail.getDeliveryCompleteCount());
+        responseMap.put("deliveryOnCallCount", calculateApplicationDetail.getDeliveryOnCallCount());
+        responseMap.put("totalDeliveryCount", calculateApplicationDetail.getDeliveryCompleteCount() + calculateApplicationDetail.getDeliveryCompleteCount() + calculateApplicationDetail.getDeliveryOnCallCount());
+        
 
         return ResponseEntity
                 .ok()
@@ -174,4 +196,5 @@ public class CalculateController {
                 .headers(headers)
                 .body(new ResponseMessage(200, "project search success", responseMap));
     }
+
 }

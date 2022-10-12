@@ -64,7 +64,7 @@ public class Judge {
 
     @OneToOne
     @JoinColumn(name = "ATC_ID")
-    private Atc atc;
+    private Attachment atc;
 
 //    @Column(name = "JUDGE_DIVISION_DES")
 //    private String divisionDes;

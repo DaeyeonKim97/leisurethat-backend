@@ -1,19 +1,21 @@
 package com.steady.leisurethatapi.calculate.service;
 
+import com.steady.leisurethatapi.attachment.service.UploadS3Service;
 import com.steady.leisurethatapi.calculate.dto.*;
-import com.steady.leisurethatapi.database.entity.Calculate;
-import com.steady.leisurethatapi.database.entity.OrderDelivery;
-import com.steady.leisurethatapi.database.entity.Project;
-import com.steady.leisurethatapi.database.entity.Reject;
+import com.steady.leisurethatapi.calculate.vo.CalculateApplicationVO;
+import com.steady.leisurethatapi.database.entity.*;
 import com.steady.leisurethatapi.database.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * <pre>
@@ -38,18 +40,25 @@ public class CalculateService {
     private final RejectRepository rejectRepository;
     private final OrderDeliveryRepositroy orderDeliveryRepositroy;
     private final ProjectRepository projectRepository;
+    private final JudgeRepository judgeRepository;
+    private final UploadS3Service uploadS3Service;
 
     @Autowired
     public CalculateService(CalculateRepository calculateRepository,
                             PaymentRepository paymentRepository,
                             RejectRepository rejectRepository,
                             OrderDeliveryRepositroy orderDeliveryRepositroy,
-                            ProjectRepository projectRepository) {
+                            ProjectRepository projectRepository,
+                            JudgeRepository judgeRepository,
+                            UploadS3Service uploadS3Service) {
+
         this.calculateRepository = calculateRepository;
         this.paymentRepository = paymentRepository;
         this.rejectRepository = rejectRepository;
         this.orderDeliveryRepositroy = orderDeliveryRepositroy;
         this.projectRepository = projectRepository;
+        this.judgeRepository = judgeRepository;
+        this.uploadS3Service = uploadS3Service;
     }
 
 
@@ -63,7 +72,7 @@ public class CalculateService {
             CalculateApplicationStatusDTO calculateApplicationStatusDTO = new CalculateApplicationStatusDTO();
             calculateApplicationStatusDTO.setCalculateId(calculate.getId());
             calculateApplicationStatusDTO.setCalculateRound(calculate.getDivision().substring(0,2));
-            calculateApplicationStatusDTO.setStatus("정산"+calculate.getJudge().getJudgeDivision().getDes().substring(2,4));
+            calculateApplicationStatusDTO.setStatus("정산 "+calculate.getJudge().getJudgeDivision().getDes().substring(2,4));
 
             if(calculate.getPostAmount() != null) {
                 calculateApplicationStatusDTO.setAmount(calculate.getPostAmount());
@@ -83,6 +92,10 @@ public class CalculateService {
 
         return paymentRepository.findPaymentSum(projectId);
     }
+    public List<DeliveryStatusCount> selectDeliveryStatus(int projectId) {
+
+        return orderDeliveryRepositroy.findByProjectId(projectId);
+    }
 
     public Calculate selectJudgeId(int id) {
 
@@ -101,6 +114,8 @@ public class CalculateService {
         rejectReason.setMakerUserName(reject.getJudge().getProject().getAccountInfo().getBusinessInfo().getMember().getUsername());
         rejectReason.setRejectTitle(reject.getTitle());
         rejectReason.setRejectContent(reject.getContent());
+        rejectReason.setRejectId(reject.getId());
+        rejectReason.setJudgeId(judgeId);
 
         System.out.println(rejectReason);
 
@@ -119,11 +134,12 @@ public class CalculateService {
         calculateApplicationDetail.setMakerUserName(calculateDetail.getJudge().getProject().getAccountInfo().getBusinessInfo().getMember().getUsername());
         calculateApplicationDetail.setCalculateRound(calculateDetail.getDivision().substring(0,2));
         calculateApplicationDetail.setCalculateStatus("정산 "+calculateDetail.getJudge().getJudgeDivision().getDes().substring(2,4));
-        calculateApplicationDetail.setTotalAmount(calculateAmount.getActualAmount());
+        calculateApplicationDetail.setTotalAmount(calculateDetail.getTotal());
 
         if(calculateDetail.getPostAmount() != null) {
             calculateApplicationDetail.setCalculateAmount(calculateDetail.getPostAmount());
             List<DeliveryStatusCount> deliveryStatusList = orderDeliveryRepositroy.findByProjectId(calculateDetail.getJudge().getProject().getId());
+            System.out.println(deliveryStatusList);
             deliveryStatusList.forEach(deliveryStatusCount -> {
                 if(deliveryStatusCount.getDeliveryStatus() == "배송중") {
                     calculateApplicationDetail.setDeliveryOngoingCount(deliveryStatusCount.getDeliveryStatusCount());
@@ -278,7 +294,14 @@ public class CalculateService {
             projectInfo.setPreAmountGiveDate(calculate.getGiveDate());
         }
 
+        projectInfo.setTotalCalculateAmount(projectInfo.getPreAmount() + projectInfo.getPostAmount());
+
 
         return projectInfo;
+    }
+
+    public Project selectProject(int projectId) {
+
+        return projectRepository.findById(projectId);
     }
 }
