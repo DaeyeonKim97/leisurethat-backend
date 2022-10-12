@@ -25,15 +25,19 @@ public class CalculateRejectResponseDTO {
     private String makerUserName;
     private String category;
     private String atcDownload;
+    private int judgeId;
+    private int rejectId;
     private String rejectTitle;
     private String rejectContent;
     public CalculateRejectResponseDTO() {}
 
-    public CalculateRejectResponseDTO(String projectName, String makerUserName, String category, String atcDownload, String rejectTitle, String rejectContent) {
+    public CalculateRejectResponseDTO(String projectName, String makerUserName, String category, String atcDownload, int judgeId, int rejectId, String rejectTitle, String rejectContent) {
         this.projectName = projectName;
         this.makerUserName = makerUserName;
         this.category = category;
         this.atcDownload = atcDownload;
+        this.judgeId = judgeId;
+        this.rejectId = rejectId;
         this.rejectTitle = rejectTitle;
         this.rejectContent = rejectContent;
     }
@@ -70,6 +74,22 @@ public class CalculateRejectResponseDTO {
         this.atcDownload = atcDownload;
     }
 
+    public int getJudgeId() {
+        return judgeId;
+    }
+
+    public void setJudgeId(int judgeId) {
+        this.judgeId = judgeId;
+    }
+
+    public int getRejectId() {
+        return rejectId;
+    }
+
+    public void setRejectId(int rejectId) {
+        this.rejectId = rejectId;
+    }
+
     public String getRejectTitle() {
         return rejectTitle;
     }
@@ -93,6 +113,8 @@ public class CalculateRejectResponseDTO {
                 ", makerUserName='" + makerUserName + '\'' +
                 ", category='" + category + '\'' +
                 ", atcDownload='" + atcDownload + '\'' +
+                ", judgeId=" + judgeId +
+                ", rejectId=" + rejectId +
                 ", rejectTitle='" + rejectTitle + '\'' +
                 ", rejectContent='" + rejectContent + '\'' +
                 '}';
