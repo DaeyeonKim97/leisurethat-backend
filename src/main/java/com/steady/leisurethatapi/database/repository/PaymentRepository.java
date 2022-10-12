@@ -51,4 +51,33 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
     int findSupportCount(int projectId);
 
     List<Payment> findAllByOrderMemberUsername(String username, Pageable pageable);
+
+    @Query(value = "SELECT \n" +
+    "count(*) FROM Payment p \n" +
+            "WHERE p.order.project.id = :projectId \n" +
+            "AND p.paymentStatus = :orderStatus \n" +
+            "AND p.order.id = :id \n" +
+            "AND p.order.member.name = :sponserName")
+    int findCancleCountByOrderProjectIdAndOrderStatusAndOrderIdAndOrderMemberName(int projectId, String orderStatus, int id, String sponserName);
+
+    @Query(value = "SELECT \n" +
+            "count(*) FROM Payment p \n" +
+            "WHERE p.order.project.id = :projectId \n" +
+            "AND p.paymentStatus = :orderStatus \n" +
+            "AND p.order.id = :id")
+    int findCancleCountByOrderProjectIdAndOrderStatusAndOrderId(int projectId, String orderStatus, int id);
+
+    @Query(value = "SELECT \n" +
+            "count(*) FROM Payment p \n" +
+            "WHERE p.order.project.id = :projectId \n" +
+            "AND p.paymentStatus = :orderStatus \n" +
+            "AND p.order.member.name = :sponserName")
+    int findCancleCountByOrderProjectIdAndOrderStatusAndOrderMemberName(int projectId, String orderStatus, String sponserName);
+
+
+    @Query(value = "SELECT \n" +
+            "count(*) FROM Payment p \n" +
+            "WHERE p.order.project.id = :projectId \n" +
+            "AND p.paymentStatus = :orderStatus")
+    int findCancleCountByOrderProjectIdAndOrderStatus(int projectId, String orderStatus);
 }
