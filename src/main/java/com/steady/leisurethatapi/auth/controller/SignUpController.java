@@ -58,7 +58,7 @@ public class SignUpController {
                     snsCategoryRepository.findById(1),
                     null,
                     null,
-                    "MEMBER"
+                    "USER"
             ));
 
         } catch (Exception e){
