@@ -110,8 +110,8 @@ public class ProjectDetailController {
         Map<String , Object> responseMap = new HashMap<>();
 
         List<ProjectListResponseDTO> projectList = projectDetailService.getEnrollList(pageable);
-        int total = projectRepository.countByStatusId(1);
         responseMap.put("projectList", projectList);
+        int total = projectRepository.countByStatusId(1);
         responseMap.put("total",total);
 
         return ResponseEntity
@@ -166,6 +166,9 @@ public class ProjectDetailController {
         List<ProjectListResponseDTO> projectList = projectDetailService.getPreOpenList(pageable);
         responseMap.put("projectList", projectList);
 
+        int total = projectRepository.countByStatusId(3);
+        responseMap.put("total",total);
+
         return ResponseEntity
                 .ok()
                 .body(new ResponseMessage(200,"success",responseMap));
@@ -179,6 +182,9 @@ public class ProjectDetailController {
 
         List<ProjectListResponseDTO> projectList = projectDetailService.getOpenList(pageable);
         responseMap.put("projectList", projectList);
+
+        int total = projectRepository.countByStatusId(3);
+        responseMap.put("total",total);
 
         return ResponseEntity
                 .ok()
