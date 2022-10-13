@@ -4,14 +4,15 @@ import com.steady.leisurethatapi.database.entity.OrderDelivery;
 import com.steady.leisurethatapi.database.entity.Payment;
 import com.steady.leisurethatapi.database.repository.OrderDeliveryRepositroy;
 import com.steady.leisurethatapi.database.repository.PaymentRepository;
+import com.steady.leisurethatapi.order.dto.OrderCompleteDTO;
 import com.steady.leisurethatapi.order.dto.OrderInfoDTO;
 import com.steady.leisurethatapi.order.dto.OrderUserInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +30,13 @@ import java.util.List;
  * @author 홍길동(최초 작성자)
  * @version 1(클래스 버전)
  */
+
 @Service
 public class OrderService {
 
     private final PaymentRepository paymentRepository;
     private final OrderDeliveryRepositroy orderDeliveryRepositroy;
+
 
     @Autowired
     public OrderService(PaymentRepository paymentRepository, OrderDeliveryRepositroy orderDeliveryRepositroy) {
@@ -106,5 +109,92 @@ public class OrderService {
 
         return orderUserInfo;
     }
+
+    public List<OrderInfoDTO> selectOrderWaitingList(int projectId, int id, String sponserName, String orderStatus, Pageable pageable) {
+
+        List<Payment> paymentList = null;
+//        paymentList = paymentList = paymentRepository.findAllByOrderProjectIdAndOrderOrderStatus(projectId, orderStatus, pageable);
+        if(id > 0 && sponserName != null){
+            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderStatusAndOrderIdAndOrderMemberName(projectId, orderStatus, id, sponserName, pageable);
+        } else if (id > 0) {
+            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderStatusAndOrderId(projectId, orderStatus, id, pageable);
+        } else if(sponserName != null) {
+            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderStatusAndOrderMemberName(projectId, orderStatus, sponserName, pageable);
+        } else {
+            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderStatus(projectId, orderStatus, pageable);
+        }
+
+        List<OrderInfoDTO> waitingList = new ArrayList<>();
+
+        //람다식
+        paymentList.forEach(payment -> {
+            OrderInfoDTO orderInfo = new OrderInfoDTO();
+
+            orderInfo.setOrderId(payment.getOrder().getId());
+            orderInfo.setPaymentPrice(payment.getPaymentPrice());
+            orderInfo.setRewardName(payment.getOrder().getReward().getTitle());
+            orderInfo.setSponserName(payment.getOrder().getMember().getName());
+            orderInfo.setOrderStatus(payment.getOrder().getStatus());
+
+            waitingList.add(orderInfo);
+        });
+
+
+        return waitingList;
+
+
+    }
+
+    public List<OrderCompleteDTO> selectOrderCompleteList(int projectId, int id, String sponserName, String orderStatus, Pageable pageable) {
+
+        List<Payment> paymentList = null;
+//        paymentList = paymentList = paymentRepository.findAllByOrderProjectIdAndOrderOrderStatus(projectId, orderStatus, pageable);
+        if(id > 0 && sponserName != null){
+            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderStatusAndOrderIdAndOrderMemberName(projectId, orderStatus, id, sponserName, pageable);
+        } else if (id > 0) {
+            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderStatusAndOrderId(projectId, orderStatus, id, pageable);
+        } else if(sponserName != null) {
+            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderStatusAndOrderMemberName(projectId, orderStatus, sponserName, pageable);
+        } else {
+            paymentList = paymentRepository.findAllByOrderProjectIdAndOrderStatus(projectId, orderStatus, pageable);
+        }
+
+        List<OrderCompleteDTO> completeList = new ArrayList<>();
+
+        //람다식
+        paymentList.forEach(payment -> {
+            OrderCompleteDTO orderComplete = new OrderCompleteDTO();
+
+//            System.out.println(payment.getOrder().getId());
+            OrderDelivery orderDelivery = orderDeliveryRepositroy.findByOrderId(payment.getOrder().getId());
+
+            System.out.println(orderDelivery);
+
+            orderComplete.setOrderId(payment.getOrder().getId());
+            orderComplete.setPaymentPrice(payment.getPaymentPrice());
+            orderComplete.setRewardName(payment.getOrder().getReward().getTitle());
+            orderComplete.setSponserName(payment.getOrder().getMember().getName());
+            orderComplete.setOrderStatus(payment.getOrder().getStatus());
+            orderComplete.setDeliveryDate(orderDelivery.getDeliveryDate());
+            orderComplete.setDeliveryStatus(orderDelivery.getDeliveryStatus());
+
+            completeList.add(orderComplete);
+        });
+
+        return completeList;
+
+
+    }
+
+
+    @Transactional
+    public void postWaybill(OrderCompleteDTO newWaybill) {
+
+        OrderDelivery orderDelivery = orderDeliveryRepositroy.findByOrderId(newWaybill.getOrderId());
+        System.out.println(orderDelivery);
+        orderDelivery.setWaybillId(newWaybill.getWaybillId());
+        orderDelivery.setCourierId(newWaybill.getCourierId());
+    }
+
 
 }
