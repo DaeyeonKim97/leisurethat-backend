@@ -3,6 +3,7 @@ package com.steady.leisurethatapi.database.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.repository.Temporal;
 
 import javax.persistence.*;
 import java.sql.Date;
