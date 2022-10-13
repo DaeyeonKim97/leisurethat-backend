@@ -34,10 +34,12 @@ public class FundingResponseDTO {
     private String detailAddress;
     private String paymentInfo;
     private long paymentPrice;
+    private String projectImg;
+    private String paymentDivision;
 
     public FundingResponseDTO() {}
 
-    public FundingResponseDTO(String paymentStatus, String projectName, int achievement, Date orderDate, Date projectEndDate, int orderId, String rewardName, String rewardOption, int rewardAmount, String receiver, String receiverPhone, String basicAddress, String detailAddress, String paymentInfo, long paymentPrice) {
+    public FundingResponseDTO(String paymentStatus, String projectName, int achievement, Date orderDate, Date projectEndDate, int orderId, String rewardName, String rewardOption, int rewardAmount, String receiver, String receiverPhone, String basicAddress, String detailAddress, String paymentInfo, long paymentPrice, String projectImg, String paymentDivision) {
         this.paymentStatus = paymentStatus;
         this.projectName = projectName;
         this.achievement = achievement;
@@ -53,6 +55,8 @@ public class FundingResponseDTO {
         this.detailAddress = detailAddress;
         this.paymentInfo = paymentInfo;
         this.paymentPrice = paymentPrice;
+        this.projectImg = projectImg;
+        this.paymentDivision = paymentDivision;
     }
 
     public String getPaymentStatus() {
@@ -175,6 +179,22 @@ public class FundingResponseDTO {
         this.paymentPrice = paymentPrice;
     }
 
+    public String getProjectImg() {
+        return projectImg;
+    }
+
+    public void setProjectImg(String projectImg) {
+        this.projectImg = projectImg;
+    }
+
+    public String getPaymentDivision() {
+        return paymentDivision;
+    }
+
+    public void setPaymentDivision(String paymentDivision) {
+        this.paymentDivision = paymentDivision;
+    }
+
     @Override
     public String toString() {
         return "FundingResponseDTO{" +
@@ -193,6 +213,8 @@ public class FundingResponseDTO {
                 ", detailAddress='" + detailAddress + '\'' +
                 ", paymentInfo='" + paymentInfo + '\'' +
                 ", paymentPrice=" + paymentPrice +
+                ", projectImg='" + projectImg + '\'' +
+                ", paymentDivision='" + paymentDivision + '\'' +
                 '}';
     }
 }

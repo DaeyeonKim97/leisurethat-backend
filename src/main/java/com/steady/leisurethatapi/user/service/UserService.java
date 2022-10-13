@@ -1,13 +1,7 @@
 package com.steady.leisurethatapi.user.service;
 
-import com.steady.leisurethatapi.database.entity.Order;
-import com.steady.leisurethatapi.database.entity.OrderDelivery;
-import com.steady.leisurethatapi.database.entity.Payment;
-import com.steady.leisurethatapi.database.entity.Project;
-import com.steady.leisurethatapi.database.repository.OrderDeliveryRepositroy;
-import com.steady.leisurethatapi.database.repository.OrderRepository;
-import com.steady.leisurethatapi.database.repository.PaymentRepository;
-import com.steady.leisurethatapi.database.repository.ProjectRepository;
+import com.steady.leisurethatapi.database.entity.*;
+import com.steady.leisurethatapi.database.repository.*;
 import com.steady.leisurethatapi.user.dto.FundingResponseDTO;
 import com.steady.leisurethatapi.user.dto.MakeProjectResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +33,15 @@ public class UserService {
     private final PaymentRepository paymentRepository;
     private final OrderDeliveryRepositroy orderDeliveryRepositroy;
     private final ProjectRepository projectRepository;
+    private final OrderDetailRepository orderDetailRepository;
+
 
     @Autowired
-    public UserService(PaymentRepository paymentRepository, OrderDeliveryRepositroy orderDeliveryRepositroy, ProjectRepository projectRepository) {
+    public UserService(PaymentRepository paymentRepository, OrderDeliveryRepositroy orderDeliveryRepositroy, ProjectRepository projectRepository, OrderDetailRepository orderDetailRepository) {
         this.paymentRepository = paymentRepository;
         this.orderDeliveryRepositroy = orderDeliveryRepositroy;
         this.projectRepository = projectRepository;
+        this.orderDetailRepository = orderDetailRepository;
     }
 
     public FundingResponseDTO selectFundingList(String username, Pageable pageable) {
@@ -54,9 +51,15 @@ public class UserService {
         List<Payment> payments = paymentRepository.findAllByOrderMemberUsername(username, pageable);
 
         payments.forEach(payment -> {
+            System.out.println(payment);
             OrderDelivery orderDelivery = orderDeliveryRepositroy.findByOrderId(payment.getOrder().getId());
+            OrderDetail orderDetail = orderDetailRepository.findByOrderId(payment.getOrder().getId());
             int sumSupportAmount = paymentRepository.findSumSupportAmountByProjectId(payment.getOrder().getProject().getId());
             int achievement = (int)((double)sumSupportAmount / (double) payment.getOrder().getProject().getTargetAmount() * 100);
+
+
+            fundingResponse.setProjectImg(payment.getOrder().getProject().getAccountInfo().getAttachment().getDownloadAddress());
+            fundingResponse.setPaymentDivision("토스페이먼트 카드");
 
             fundingResponse.setOrderId(payment.getOrder().getId());
             fundingResponse.setOrderDate(payment.getOrder().getOrderDate());
@@ -70,7 +73,7 @@ public class UserService {
             fundingResponse.setReceiver(orderDelivery.getDelivery().getDeliveryReceiver());
             fundingResponse.setReceiverPhone(payment.getOrder().getMember().getPhone());
             fundingResponse.setRewardName(payment.getOrder().getReward().getTitle());
-//            fundingResponse.setRewardAmount(payment);
+            fundingResponse.setRewardAmount(orderDetail.getRewardAmount());
             fundingResponse.setAchievement(achievement);
         });
 

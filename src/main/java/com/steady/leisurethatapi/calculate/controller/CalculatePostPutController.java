@@ -164,7 +164,7 @@ public class CalculatePostPutController {
 
     @Transactional
     @PostMapping("/judge")
-    public ResponseEntity<?> postCalculateJudge(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CalculateJudgeVO vo) {
+    public ResponseEntity<?> postCalculateJudge(@AuthenticationPrincipal UserDetails userDetails, CalculateJudgeVO vo) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
@@ -210,6 +210,7 @@ public class CalculatePostPutController {
             Judge judge = calculate.getJudge();
             judgeDivision.ifPresent(division -> {
                 judge.setJudgeDivision(division);
+                judge.setPrcDate(new Date(new java.util.Date().getTime()));
             });
             modifyJudge = judgeRepository.save(judge);
 
@@ -260,7 +261,7 @@ public class CalculatePostPutController {
 
     @Transactional
     @PutMapping("/judge/reject")
-    public ResponseEntity<?> putCaculateReject(@RequestBody CalculateRejectVO vo){
+    public ResponseEntity<?> putCaculateReject(CalculateRejectVO vo){
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));

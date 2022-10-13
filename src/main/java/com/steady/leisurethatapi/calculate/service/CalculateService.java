@@ -61,11 +61,38 @@ public class CalculateService {
         this.uploadS3Service = uploadS3Service;
     }
 
+//
+//    public List<CalculateApplicationStatusDTO> selectCalculateApplicationList(int projectId, Pageable pageable) {
+//
+//        List<Calculate> calculates = calculateRepository.findAllByJudgeProjectId(projectId, pageable);
+//
+//        List<CalculateApplicationStatusDTO> calculateList = new ArrayList<>();
+//
+//        calculates.forEach(calculate -> {
+//            CalculateApplicationStatusDTO calculateApplicationStatusDTO = new CalculateApplicationStatusDTO();
+//            calculateApplicationStatusDTO.setCalculateId(calculate.getId());
+//            calculateApplicationStatusDTO.setCalculateRound(calculate.getDivision().substring(0,2));
+//            calculateApplicationStatusDTO.setStatus("정산 "+calculate.getJudge().getJudgeDivision().getDes().substring(2,4));
+//
+//            if(calculate.getPostAmount() != null) {
+//                calculateApplicationStatusDTO.setAmount(calculate.getPostAmount());
+//            } else {
+//                calculateApplicationStatusDTO.setAmount(calculate.getPreAmount());
+//            }
+//
+//            calculateApplicationStatusDTO.setRegDate(calculate.getJudge().getRegDate());
+//            calculateApplicationStatusDTO.setGiveDate(calculate.getGiveDate());
+//            calculateList.add(calculateApplicationStatusDTO);
+//        });
+//
+//        return calculateList;
+//    }
 
-    public List<CalculateApplicationStatusDTO> selectCalculateApplicationList(int projectId, Pageable pageable) {
+    public List<CalculateApplicationStatusDTO> selectCalculateApplicationList(int projectId, Sort sort) {
 
-        List<Calculate> calculates = calculateRepository.findAllByJudgeProjectId(projectId, pageable);
-
+        List<Calculate> calculates = calculateRepository.findAllByJudgeProjectId(projectId, sort);
+//
+        System.out.println(calculates);
         List<CalculateApplicationStatusDTO> calculateList = new ArrayList<>();
 
         calculates.forEach(calculate -> {
@@ -86,6 +113,7 @@ public class CalculateService {
         });
 
         return calculateList;
+//        return null;
     }
 
     public CalculateAmountResultDTO selectCalculateAmount(int projectId) {

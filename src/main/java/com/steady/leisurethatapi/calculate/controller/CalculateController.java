@@ -51,10 +51,15 @@ public class CalculateController {
         headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
         Map<String,Object> responseMap = new HashMap<>();
 
-        Pageable pageable = PageRequest.of(offset, 6, Sort.by("id").descending());
+//        Pageable pageable = PageRequest.of(offset, 6, Sort.by("id").descending());
+//
+//        List<CalculateApplicationStatusDTO> calculateApplicationList = calculateService.selectCalculateApplicationList(projectId, pageable);
 
-        List<CalculateApplicationStatusDTO> calculateApplicationList = calculateService.selectCalculateApplicationList(projectId, pageable);
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+
+        List<CalculateApplicationStatusDTO> calculateApplicationList = calculateService.selectCalculateApplicationList(projectId, sort);
         CalculateAmountResultDTO calculateAmount = calculateService.selectCalculateAmount(projectId);
+        System.out.println(calculateAmount);
         List<DeliveryStatusCount> deliveryStatusList = calculateService.selectDeliveryStatus(projectId);
         Project projectInfo = calculateService.selectProject(projectId);
         int excludingFees = (int) (calculateAmount.getActualAmount() * 0.95);
