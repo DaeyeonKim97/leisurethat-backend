@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
 
-    public Delivery findByDeliveryBasicAndMember(String date, Member member);
+    public Delivery findByDeliveryBasicYnAndMember(String date, Member member);
     public Delivery findById(int id);
 }

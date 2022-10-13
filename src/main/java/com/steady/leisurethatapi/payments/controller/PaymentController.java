@@ -31,7 +31,7 @@ public class PaymentController {
     private final MemberRepository memberRepository;
     private final DeliveryRepository deliveryRepository;
     private final OrderRepository orderRepository;
-    private final OrderDeliveryRepository orderDeliveryRepository;
+    private final OrderDeliveryRepositroy orderDeliveryRepository;
     private final PaymentRepository paymentRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final TossPayment tossPayment;
@@ -42,7 +42,7 @@ public class PaymentController {
                              MemberRepository memberRepository,
                              DeliveryRepository deliveryRepository,
                              OrderRepository orderRepository,
-                             OrderDeliveryRepository orderDeliveryRepository,
+                             OrderDeliveryRepositroy orderDeliveryRepository,
                              PaymentRepository paymentRepository,
                              OrderDetailRepository orderDetailRepository,
                              TossPayment tossPayment){
@@ -93,10 +93,8 @@ public class PaymentController {
         responseMap.put("reward",reward);
         responseMap.put("project",projectRepository.findById(reward.getProject().getId()));
         responseMap.put("user",user);
-        responseMap.put("delivery",deliveryRepository.findByDeliveryBasicAndMember("Y", user));
+        responseMap.put("delivery",deliveryRepository.findByDeliveryBasicYnAndMember("Y", user));
 
-        System.out.println("=============Delivery========");
-        System.out.println(deliveryRepository.findByDeliveryBasicAndMember("Y", user));
         return ResponseEntity.ok().body(new ResponseMessage(200, "success", responseMap));
     }
     @Transactional
@@ -104,7 +102,6 @@ public class PaymentController {
     public String tossPay(@RequestBody PaymentsDTO paymentsDTO) throws IOException, InterruptedException, ParseException {
 
 
-        System.out.println("========pay start========");
         //빌링키 인증 필요
         if(paymentsDTO.getCustomerkey() == null){
             return "인증키가 유효하지 않습니다.";
@@ -166,28 +163,29 @@ public class PaymentController {
         }
         // 결제 등록
         Payment payment = new Payment();
-        payment.setDivision("C");
-        payment.setPrice(price);
-        payment.setConunt(0);
-        payment.setPaymentState("결제 대기");
+        payment.setPaymentDivision("C");
+        payment.setPaymentPrice(price);
+        payment.setPaymentCount(0);
+        payment.setPaymentStatus("결제 대기");
         payment.setPaymentReserveDate(new java.sql.Date(today.getTime()));
         payment.setOrder(newOrder);
-        payment.setBillingKey(billingKey);
-        payment.setPaymentToken(paymentsDTO.getCustomerkey());
+        payment.setCardToken(billingKey);
+        payment.setKakaoToken(paymentsDTO.getCustomerkey());
         paymentRepository.save(payment);
+
 
         // 주문배송 등록
         Delivery delivery = deliveryRepository.getReferenceById(paymentsDTO.getDeliveryId());
 
         OrderDelivery orderDelivery = new OrderDelivery();
         orderDelivery.setDelivery(delivery);
-        orderDelivery.setDeliveryState("배송대기");
-        orderDelivery.setDeliveryRegistDate(new java.sql.Date(today.getTime()));
+        orderDelivery.setDelivertStatus("배송대기");
+        orderDelivery.setOrderDeliveryDate(new java.sql.Date(today.getTime()));
         orderDelivery.setOrder(newOrder);
         orderDelivery.setMember(member);
 
         orderDeliveryRepository.save(orderDelivery);
-        return "test";
+        return "결제 완료";
     }
 
 

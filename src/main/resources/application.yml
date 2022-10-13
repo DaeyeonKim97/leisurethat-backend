@@ -6,9 +6,11 @@ server:
 spring:
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
-    url: jdbc:oracle:thin:@localhost:1521:xe
-    username: C##leisurethat
-    password: 1234
+
+    url: jdbc:oracle:thin:@metaverse.ohgiraffers.com:1521/xe
+    username: C##LEISURETHAT_dykim
+    password: leisurethat
+
   jpa:
     show-sql: true
     hibernate:
@@ -20,9 +22,21 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-      location: /Users/dykim/Downloads
+      location: /Users/dykim/Downloads/leisurethat
   config:
     import: classpath:application-aws.yml
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: bulkkotnamja@gmail.com
+    password: ncfmvuoldtopdgtd
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
 
 logging:
   level:
@@ -34,7 +48,9 @@ jwt:
   access-token-validity-in-seconds: 7200 #2 hours
   refresh-token-validity-in-seconds : 43200 # 12 hours
 
+
 #Toss Secret Key
 key:
   SECRET: "test_sk_D4yKeq5bgrpmoOaRLyX8GX0lzW6Y:"
   CUSTMER: "test_ck_7DLJOpm5Qrl2BpO2oKe3PNdxbWnY"
+

@@ -52,16 +52,16 @@ public class PaymentService {
                 List<Order> orderList = orderRepository.findByProjectId(pro.getId());
                 for (Order order: orderList) {
                     if(!order.getStatus().equals("결제 완료")){
-                        Payment payment = paymentRepository.findByOrderAndBillingKeyIsNotNull(order);
+                        Payment payment = paymentRepository.findByOrderAndCardTokenIsNotNull(order);
                         if(payment != null){
-                            JSONObject payRequest = tossPayment.BillingKey(payment.getBillingKey(),payment.getPrice(),payment.getId(),order.getMember().getEmail(), order.getMember().getName(),order.getReward().getTitle(),0 );
+                            JSONObject payRequest = tossPayment.BillingKey(payment.getCardToken(),payment.getPaymentPrice(),payment.getPaymentId(),order.getMember().getEmail(), order.getMember().getName(),order.getReward().getTitle(),0 );
                             if(payRequest.get("code") == null) {
-                                payment.setPaymentState("결제 실패");
-                                payment.setConunt(payment.getConunt() + 1);
-                                payment.setModifyDate(whereDate);
+                                payment.setPaymentStatus("결제 실패");
+                                payment.setPaymentCount(payment.getPaymentCount() + 1);
+                                payment.setPaymentModifyDate(whereDate);
                             }else{
-                                payment.setPaymentDate(whereDate);
-                                payment.setPaymentState("결제 완료");
+                                payment.setPayementDate(whereDate);
+                                payment.setPaymentStatus("결제 완료");
                             }
                             paymentRepository.save(payment);
                         }
