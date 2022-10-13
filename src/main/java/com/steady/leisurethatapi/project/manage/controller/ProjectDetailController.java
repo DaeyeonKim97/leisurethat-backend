@@ -110,7 +110,9 @@ public class ProjectDetailController {
         Map<String , Object> responseMap = new HashMap<>();
 
         List<ProjectListResponseDTO> projectList = projectDetailService.getEnrollList(pageable);
+        int total = projectRepository.countByStatusId(1);
         responseMap.put("projectList", projectList);
+        responseMap.put("total",total);
 
         return ResponseEntity
                 .ok()
