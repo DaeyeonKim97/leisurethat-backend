@@ -3,6 +3,8 @@ package com.steady.leisurethatapi.database.repository;
 import com.steady.leisurethatapi.database.entity.Judge;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 /**
  * <pre>
  * Class : JudgeRepository
@@ -21,5 +23,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface JudgeRepository extends JpaRepository<Judge, Integer> {
 
 
+    Judge findByProjectId(int projectId);
 
+    List<Judge> findAllByProjectId(int projectId);
 }
