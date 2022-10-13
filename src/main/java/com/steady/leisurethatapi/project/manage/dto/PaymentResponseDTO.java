@@ -26,16 +26,16 @@ public class PaymentResponseDTO {
     private Date refundDate;
 
     public PaymentResponseDTO(Payment payment) {
-        this.paymentId = payment.getId();
-        this.paymentDivision = payment.getDivision();
-        this.paymentPrice = payment.getPrice();
-        this.paymentCount = payment.getCount();
-        this.paymentStatus = payment.getStatus();
-        this.paymentDate = payment.getPaymentDate();
+        this.paymentId = payment.getPaymentId();
+        this.paymentDivision = payment.getPaymentDivision();
+        this.paymentPrice = payment.getPaymentPrice();
+        this.paymentCount = payment.getPaymentCount();
+        this.paymentStatus = payment.getPaymentStatus();
+        this.paymentDate = payment.getPaymentReserveDate();
         this.order = new OrderResponseDTO(payment.getOrder());
         this.paymentModifyDate = payment.getPaymentModifyDate();
-        this.kakaoPaymentToken = payment.getKakaoPaymentToken();
-        this.cardPaymentToken = payment.getCardPaymentToken();
+        this.kakaoPaymentToken = payment.getKakaoToken();
+        this.cardPaymentToken = payment.getCardToken();
         this.refundReason = payment.getRefundReason();
         this.refundRequestDate = payment.getRefundRequestDate();
         this.refundDate = payment.getRefundDate();

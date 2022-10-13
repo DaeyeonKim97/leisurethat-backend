@@ -3,7 +3,6 @@ package com.steady.leisurethatapi.auth.controller;
 import com.steady.leisurethatapi.auth.dto.SignUpDTO;
 import com.steady.leisurethatapi.common.dto.ResponseMessage;
 import com.steady.leisurethatapi.database.entity.Member;
-import com.steady.leisurethatapi.database.entity.SnsCategory;
 import com.steady.leisurethatapi.database.repository.MemberRepository;
 import com.steady.leisurethatapi.database.repository.SnsCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
