@@ -42,21 +42,21 @@ public class LoginController {
         try{
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginInfo.getUserName(),
+                            loginInfo.getUsername(),
                             loginInfo.getPassword()
                     )
             );
         } catch (Exception e){
             System.out.println(e);
-            responseMap.put("inputId", loginInfo.getUserName());
+            responseMap.put("inputId", loginInfo.getUsername());
             return ResponseEntity
                     .badRequest()
                     .headers(headers)
                     .body(new ResponseMessage(400, "login failed", responseMap));
         }
 
-        token = jwtUtil.generateToken(loginInfo.getUserName());
-        responseMap.put("id",loginInfo.getUserName());
+        token = jwtUtil.generateToken(loginInfo.getUsername());
+        responseMap.put("id",loginInfo.getUsername());
         responseMap.put("token",token);
         return ResponseEntity
                 .ok()

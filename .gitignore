@@ -33,3 +33,4 @@ build/
 .vscode/
 
 Wallet_leisurethat
+**/application-*.yml
