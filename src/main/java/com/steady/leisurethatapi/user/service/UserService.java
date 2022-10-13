@@ -54,30 +54,46 @@ public class UserService {
             System.out.println(payment);
             OrderDelivery orderDelivery = orderDeliveryRepositroy.findByOrderId(payment.getOrder().getId());
             OrderDetail orderDetail = orderDetailRepository.findByOrderId(payment.getOrder().getId());
-            int sumSupportAmount = paymentRepository.findSumSupportAmountByProjectId(payment.getOrder().getProject().getId());
-            int achievement = (int)((double)sumSupportAmount / (double) payment.getOrder().getProject().getTargetAmount() * 100);
+            Integer sumSupportAmount = paymentRepository.findSumSupportAmountByProjectId(payment.getOrder().getProject().getId());
 
+            int achievement = 0;
+            if(sumSupportAmount != null) {
+                achievement = (int)((double)sumSupportAmount / (double) payment.getOrder().getProject().getTargetAmount() * 100);
+            }
 
-            fundingResponse.setProjectImg(payment.getOrder().getProject().getAccountInfo().getAttachment().getDownloadAddress());
-            fundingResponse.setPaymentDivision("토스페이먼트 카드");
+            if(orderDelivery != null && orderDetail != null) {
 
-            fundingResponse.setOrderId(payment.getOrder().getId());
-            fundingResponse.setOrderDate(payment.getOrder().getOrderDate());
-            fundingResponse.setProjectName(payment.getOrder().getProject().getName());
-            fundingResponse.setProjectEndDate(payment.getOrder().getProject().getEndDate());
-            fundingResponse.setPaymentInfo(payment.getPaymentDivision());
-            fundingResponse.setPaymentStatus(payment.getPaymentStatus());
-            fundingResponse.setPaymentPrice(payment.getPaymentPrice());
-            fundingResponse.setBasicAddress(orderDelivery.getDelivery().getDeliveryBasicAddress());
-            fundingResponse.setDetailAddress(orderDelivery.getDelivery().getDeliveryDetailAddress());
-            fundingResponse.setReceiver(orderDelivery.getDelivery().getDeliveryReceiver());
-            fundingResponse.setReceiverPhone(payment.getOrder().getMember().getPhone());
-            fundingResponse.setRewardName(payment.getOrder().getReward().getTitle());
-            fundingResponse.setRewardAmount(orderDetail.getRewardAmount());
-            fundingResponse.setAchievement(achievement);
+                fundingResponse.setProjectImg(payment.getOrder().getProject().getAccountInfo().getAttachment().getDownloadAddress());
+                fundingResponse.setPaymentDivision("토스페이먼트 카드");
+
+                fundingResponse.setOrderId(payment.getOrder().getId());
+                fundingResponse.setOrderDate(payment.getOrder().getOrderDate());
+                fundingResponse.setProjectName(payment.getOrder().getProject().getName());
+                fundingResponse.setProjectEndDate(payment.getOrder().getProject().getEndDate());
+                fundingResponse.setPaymentInfo(payment.getPaymentDivision());
+                fundingResponse.setPaymentStatus(payment.getPaymentStatus());
+                fundingResponse.setPaymentPrice(payment.getPaymentPrice());
+                fundingResponse.setBasicAddress(orderDelivery.getDelivery().getDeliveryBasicAddress());
+                fundingResponse.setDetailAddress(orderDelivery.getDelivery().getDeliveryDetailAddress());
+                fundingResponse.setReceiver(orderDelivery.getDelivery().getDeliveryReceiver());
+                fundingResponse.setReceiverPhone(orderDelivery.getDelivery().getContact());
+                fundingResponse.setRewardName(payment.getOrder().getReward().getTitle());
+                fundingResponse.setRewardAmount(orderDetail.getRewardAmount());
+                fundingResponse.setAchievement(achievement);
+            }
+
         });
 
         return fundingResponse;
+    }
+    public int selectFundingCount(String username) {
+        List<Payment> payments = paymentRepository.findAllByOrderMemberUsername(username);
+
+        if(payments != null) {
+            return payments.size();
+        } else {
+            return 0;
+        }
     }
 
     public List<MakeProjectResponseDTO> selectMakerProjectList(String username, Pageable pageable) {
@@ -89,8 +105,13 @@ public class UserService {
         projects.forEach(project -> {
             MakeProjectResponseDTO makeProjectInfo = new MakeProjectResponseDTO();
 
-            int sumSupportAmount = paymentRepository.findSumSupportAmountByProjectId(project.getId());
-            int achievement = (int)((double)sumSupportAmount / (double) project.getTargetAmount() * 100);
+            System.out.println(project.getId());
+            Integer sumSupportAmount = paymentRepository.findSumSupportAmountByProjectId(project.getId());
+            int achievement = 0;
+            if(sumSupportAmount != null) {
+                achievement = (int)((double)sumSupportAmount / (double) project.getTargetAmount() * 100);
+            }
+
 
             makeProjectInfo.setProjectId(project.getId());
             makeProjectInfo.setProjectName(project.getName());
@@ -105,5 +126,15 @@ public class UserService {
 
 
         return makeProjectList;
+    }
+
+    public int selectProjectCount(String username) {
+        List<Project> projects = projectRepository.findAllByAccountInfoBusinessInfoMemberUsername(username);
+
+        if(projects != null) {
+            return projects.size();
+        } else {
+            return 0;
+        }
     }
 }
