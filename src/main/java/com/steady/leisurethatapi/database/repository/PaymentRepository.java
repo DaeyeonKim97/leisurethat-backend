@@ -1,5 +1,4 @@
 package com.steady.leisurethatapi.database.repository;
-
 import com.steady.leisurethatapi.calculate.dto.CalculateAmountResultDTO;
 import com.steady.leisurethatapi.database.entity.Payment;
 import org.springframework.data.domain.Pageable;
@@ -8,21 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-/**
- * <pre>
- * Class : PaymentRepository
- * Comment: 결제 쿼리문
- * History
- * ================================================================
- * DATE             AUTHOR           NOTE
- * ----------------------------------------------------------------
- * 2022-10-04       전현정           최초 생성
- * </pre>
- *
- * @author 전현정(최초 작성자)
- * @version 1(클래스 버전)
- * @see
- */
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 
 
@@ -37,7 +21,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
             "   AND A.paymentStatus NOT IN ('주문 취소') \n" +
             " GROUP BY(A.order.project.id)")
     public CalculateAmountResultDTO findPaymentSum(int projectId);
-
     @Query(value = "SELECT \n" +
             "SUM(p.paymentPrice) FROM Payment p \n" +
             "WHERE p.order.project.id = :projectId \n" +
@@ -80,4 +63,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
             "WHERE p.order.project.id = :projectId \n" +
             "AND p.paymentStatus = :orderStatus")
     int findCancleCountByOrderProjectIdAndOrderStatus(int projectId, String orderStatus);
+
+    public List<Payment> findByOrderProjectId(int projectId);
 }

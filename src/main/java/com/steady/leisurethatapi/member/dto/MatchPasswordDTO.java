@@ -1,18 +1,14 @@
-package com.steady.leisurethatapi.auth.dto;
+package com.steady.leisurethatapi.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpDTO {
-    private String username;
-    private String password;
-    @Email
-    private String email;
+public class MatchPasswordDTO {
     private String name;
+    private String username;
+    private String email;
 }

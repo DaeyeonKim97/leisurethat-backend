@@ -1,11 +1,10 @@
 package com.steady.leisurethatapi.order.controller;
 
 import com.steady.leisurethatapi.common.dto.ResponseMessage;
+import com.steady.leisurethatapi.order.dto.OrderCompleteDTO;
 import com.steady.leisurethatapi.order.dto.OrderInfoDTO;
 import com.steady.leisurethatapi.order.dto.OrderUserInfoDTO;
 import com.steady.leisurethatapi.order.service.OrderService;
-import org.apache.coyote.Response;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
@@ -89,8 +87,62 @@ public class OrderController {
                 .body(new ResponseMessage(200, "order cancle userinfo search success", responseMap));
     }
 
+    @GetMapping("/waiting")
+    public ResponseEntity<?> getOrderWaitingList(@RequestParam("projectId") int projectId, @RequestParam(value="sponserName", required = false) String sponserName, @RequestParam(value="id", defaultValue = "0") int id,
+                                                @RequestParam(value="offset", defaultValue="0") int offset) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String,Object> responseMap = new HashMap<>();
+
+        String orderStatus = "주문 대기";
+        Pageable pageable = PageRequest.of(offset, 6, Sort.by("order.id").descending());
 
 
+        List<OrderInfoDTO> waitingList = orderService.selectOrderWaitingList(projectId, id, sponserName, orderStatus, pageable);
 
+
+        responseMap.put("waitingList", waitingList);
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new ResponseMessage(200, "order waiting list search success", responseMap));
+    }
+
+    @GetMapping("/complete")
+    public ResponseEntity<?> getOrderCompleteList(@RequestParam("projectId") int projectId, @RequestParam(value="sponserName", required = false) String sponserName, @RequestParam(value="id", defaultValue = "0") int id,
+                                                 @RequestParam(value="offset", defaultValue="0") int offset) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String,Object> responseMap = new HashMap<>();
+
+        String orderStatus = "결제 완료";
+        Pageable pageable = PageRequest.of(offset, 6, Sort.by("order.id").descending());
+
+
+        List<OrderCompleteDTO> completeList = orderService.selectOrderCompleteList(projectId, id, sponserName, orderStatus, pageable);
+
+
+        responseMap.put("completeList", completeList);
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new ResponseMessage(200, "order complete list search success", responseMap));
+    }
+
+    @PostMapping("/waybill")
+    public ResponseEntity<?> postWaybill(@RequestBody OrderCompleteDTO newWaybill){
+        orderService.postWaybill(newWaybill);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        Map<String,Object> responseMap = new HashMap<>();
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new ResponseMessage(200, "waybill post success", responseMap));
+    }
 
 }
