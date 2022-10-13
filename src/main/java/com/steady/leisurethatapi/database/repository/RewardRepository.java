@@ -3,6 +3,8 @@ package com.steady.leisurethatapi.database.repository;
 import com.steady.leisurethatapi.database.entity.Reward;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RewardRepository extends JpaRepository<Reward, Integer> {
+import java.util.List;
 
+public interface RewardRepository extends JpaRepository<Reward, Integer> {
+    public List<Reward> findByProjectId(int projectId);
 }

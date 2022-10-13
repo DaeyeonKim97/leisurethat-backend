@@ -3,8 +3,10 @@ package com.steady.leisurethatapi.database.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.type.LongType;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 
 @Data
@@ -18,7 +20,7 @@ import java.sql.Date;
         initialValue = 1,
         allocationSize = 1
 )
-public class Project {
+public class Project implements Serializable {
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
@@ -53,7 +55,8 @@ public class Project {
     @OneToOne
     @JoinColumn(name = "ATC_ID")
     private Attachment attachment;
-    @Column(name = "PROJECT_REFUND_POLICY")
+//    @Lob
+    @Column(name = "PROJECT_REFUND_POLICY", columnDefinition = "LONG")
     private String refundPolicy;
     @Column(name = "PROJECT_INQUIRY_EMAIL")
     private String inquiryEmail;

@@ -13,8 +13,8 @@ import java.sql.Date;
 @AllArgsConstructor
 public class ProjectEnrollVO implements Serializable {
     private String name;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
     private int targetAmount;
     private String url;
     private int categoryId;
@@ -23,24 +23,29 @@ public class ProjectEnrollVO implements Serializable {
     private String taxInvoiceEmail;
 
     private int bankId;
-    private int accountNumber;
+    private String  accountNumber;
     private String accountHolder;
-    private MultipartFile[] accountFile;
+    private MultipartFile accountFile;
 
-    private MultipartFile[] projectFile;
+    private MultipartFile projectFile;
+    private String refundPolicy;
+    private String inquiryEmail;
+    private String inquiryPhone;
 
-    private MultipartFile[] storyFile;
+    private MultipartFile storyFile;
+    private String storyTitle;
     private String storyContent;
 
     private String productName;
-    private MultipartFile[] productFile;
+    private MultipartFile productFile;
     private String productDetail;
 
     private int rewardPrice;
     private int rewardMaxCount;
+    private int rewardServeCount;
     private String rewardTitle;
     private String rewardContent;
-    private java.util.Date rewardDate;
+    private String rewardDate;
     private int rewardFee;
     private int rewardFeeFar;
 }
