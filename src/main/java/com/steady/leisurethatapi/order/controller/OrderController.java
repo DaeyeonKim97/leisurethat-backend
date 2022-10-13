@@ -53,10 +53,12 @@ public class OrderController {
         String orderStatus = "주문 취소";
         Pageable pageable = PageRequest.of(offset, 6, Sort.by("order.id").descending());
 
-
+        int count = orderService.selectOrderCancleListCount(projectId, id, sponserName, orderStatus);
+        int pageCount = count/6;
         List<OrderInfoDTO> cancleList = orderService.selectOrderCancleList(projectId, id, sponserName, orderStatus, pageable);
 
-
+        responseMap.put("count", count);
+        responseMap.put("pageCount", pageCount);
         responseMap.put("cancleList", cancleList);
         return ResponseEntity
                 .ok()
