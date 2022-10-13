@@ -9,7 +9,6 @@ import com.steady.leisurethatapi.order.dto.OrderInfoDTO;
 import com.steady.leisurethatapi.order.dto.OrderUserInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

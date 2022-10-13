@@ -42,7 +42,7 @@ public class ProjectService {
             int sum = 0;
             List<Payment> paymentList = paymentRepository.findByOrderProjectId(project.getId());
             for(Payment payment : paymentList){
-                sum += payment.getPrice();
+                sum += payment.getPaymentPrice();
             }
             item.setTotalAmount(sum);
 

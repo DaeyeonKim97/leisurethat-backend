@@ -20,7 +20,7 @@ public class PaymentSummaryDTO {
 
         for(Payment payment : paymentList){
             totalParticipant += 1;
-            amount += payment.getPrice();
+            amount += payment.getPaymentPrice();
         }
     }
 }
