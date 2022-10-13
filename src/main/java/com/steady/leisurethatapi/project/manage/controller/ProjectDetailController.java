@@ -218,6 +218,9 @@ public class ProjectDetailController {
         List<ProjectListResponseDTO> projectList = projectDetailService.getRegForgiveList(pageable);
         responseMap.put("projectList", projectList);
 
+        int total = projectRepository.countByStatusId(6);
+        responseMap.put("total",total);
+
         return ResponseEntity
                 .ok()
                 .body(new ResponseMessage(200,"success",responseMap));
