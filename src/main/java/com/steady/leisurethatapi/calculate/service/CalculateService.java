@@ -133,12 +133,14 @@ public class CalculateService {
     public CalculateRejectResponseDTO selectRejectInfo(int judgeId) {
 
         Reject reject = rejectRepository.findByJudgeId(judgeId);
-
+        System.out.println(reject.getJudge().getAtc());
         CalculateRejectResponseDTO rejectReason = new CalculateRejectResponseDTO();
 
         rejectReason.setProjectName(reject.getJudge().getProject().getName());
         rejectReason.setCategory(reject.getJudge().getProject().getProjectCategory().getName());
+        if(reject.getJudge().getAtc() != null) {
         rejectReason.setAtcDownload(reject.getJudge().getAtc().getDownloadAddress());
+        }
         rejectReason.setMakerUserName(reject.getJudge().getProject().getAccountInfo().getBusinessInfo().getMember().getUsername());
         rejectReason.setRejectTitle(reject.getTitle());
         rejectReason.setRejectContent(reject.getContent());
