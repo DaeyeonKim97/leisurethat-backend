@@ -90,6 +90,20 @@ public class OrderService {
 
 
     }
+    public int selectOrderCancleListCount(int projectId, int id, String sponserName, String orderStatus) {
+        int count = 0;
+        if(id > 0 && sponserName != null){
+            count = paymentRepository.findCancleCountByOrderProjectIdAndOrderStatusAndOrderIdAndOrderMemberName(projectId, orderStatus, id, sponserName);
+        } else if (id > 0) {
+            count = paymentRepository.findCancleCountByOrderProjectIdAndOrderStatusAndOrderId(projectId, orderStatus, id);
+        } else if(sponserName != null) {
+            count = paymentRepository.findCancleCountByOrderProjectIdAndOrderStatusAndOrderMemberName(projectId, orderStatus, sponserName);
+        } else {
+            count = paymentRepository.findCancleCountByOrderProjectIdAndOrderStatus(projectId, orderStatus);
+        }
+
+        return count;
+    }
 
     public OrderUserInfoDTO selectOrderCancleUserInfoByOrderId(int id) {
 
