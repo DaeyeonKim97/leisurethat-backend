@@ -183,7 +183,7 @@ public class ProjectDetailController {
         List<ProjectListResponseDTO> projectList = projectDetailService.getOpenList(pageable);
         responseMap.put("projectList", projectList);
 
-        int total = projectRepository.countByStatusId(3);
+        int total = projectRepository.countByStatusId(5);
         responseMap.put("total",total);
 
         return ResponseEntity
