@@ -19,7 +19,11 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
     public List<Project> findByProjectCategoryAndStatus(ProjectCategory projectCategory, ProjectStatus projectStatus);
     @Query(value = "SELECT P.* FROM TBL_PROJECT P WHERE to_char(P.PROJECT_END_DATE,'yy/mm/dd') = TO_DATE( :date ,'yy/mm/dd')", nativeQuery = true)
     public List<Project> findByEndDate(@Param("date") Date date);
+    List<Project> findAllByAccountInfoBusinessInfoMemberId(int id);
+    List<Project> findAllByAccountInfoBusinessInfoMemberUsername(String username, Pageable pageable);
     public List<Project> findByBusinessInfoMemberUsername(String username);
     public List<Project> findByStatusId(int statusId, Pageable pageable);
     public int countByStatusId(int statusId);
+
+    List<Project> findAllByAccountInfoBusinessInfoMemberUsername(String username);
 }

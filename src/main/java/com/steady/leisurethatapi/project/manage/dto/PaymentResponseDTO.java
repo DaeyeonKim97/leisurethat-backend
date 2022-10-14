@@ -31,7 +31,7 @@ public class PaymentResponseDTO {
         this.paymentPrice = payment.getPaymentPrice();
         this.paymentCount = payment.getPaymentCount();
         this.paymentStatus = payment.getPaymentStatus();
-        this.paymentDate = payment.getPayementDate();
+        this.paymentDate = payment.getPaymentReserveDate();
         this.order = new OrderResponseDTO(payment.getOrder());
         this.paymentModifyDate = payment.getPaymentModifyDate();
         this.kakaoPaymentToken = payment.getKakaoToken();

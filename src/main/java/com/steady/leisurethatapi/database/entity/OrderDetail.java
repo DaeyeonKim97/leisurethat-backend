@@ -23,21 +23,21 @@ public class OrderDetail {
             strategy = GenerationType.SEQUENCE,
             generator = "SEQ_ORDER_DETAIL_ID_GENERATOR"
     )
-    @Column(name = "ORDER_DETAIL_ID")
+    @Column(name="ORDER_DETAIL_ID")
     private int id;
 
-    @Column(name = "REWARD_AMOUNT")
+    @Column(name="REWARD_AMOUNT")
     private int rewardAmount;
 
     @ManyToOne
-    @JoinColumn(name = "REWARD_ID")
+    @JoinColumn(name="REWARD_ID")
     private Reward reward;
 
     @OneToOne
-    @JoinColumn(name = "ORDER_ID")
+    @JoinColumn(name="ORDER_ID")
     private Order order;
 
-    @Column(name = "ORDER_DETAIL_STATUS")
-    private String orderDetailStatus;
+    @Column(name="ORDER_DETAIL_STATUS")
+    private String status;
 
 }

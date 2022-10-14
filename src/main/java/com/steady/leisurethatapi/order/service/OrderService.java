@@ -89,6 +89,20 @@ public class OrderService {
 
 
     }
+    public int selectOrderCancleListCount(int projectId, int id, String sponserName, String orderStatus) {
+        int count = 0;
+        if(id > 0 && sponserName != null){
+            count = paymentRepository.findCancleCountByOrderProjectIdAndOrderStatusAndOrderIdAndOrderMemberName(projectId, orderStatus, id, sponserName);
+        } else if (id > 0) {
+            count = paymentRepository.findCancleCountByOrderProjectIdAndOrderStatusAndOrderId(projectId, orderStatus, id);
+        } else if(sponserName != null) {
+            count = paymentRepository.findCancleCountByOrderProjectIdAndOrderStatusAndOrderMemberName(projectId, orderStatus, sponserName);
+        } else {
+            count = paymentRepository.findCancleCountByOrderProjectIdAndOrderStatus(projectId, orderStatus);
+        }
+
+        return count;
+    }
 
     public OrderUserInfoDTO selectOrderCancleUserInfoByOrderId(int id) {
 
@@ -165,9 +179,6 @@ public class OrderService {
             OrderCompleteDTO orderComplete = new OrderCompleteDTO();
 
 //            System.out.println(payment.getOrder().getId());
-            OrderDelivery orderDelivery = orderDeliveryRepositroy.findByOrderId(payment.getOrder().getId());
-
-            System.out.println(orderDelivery);
 
             orderComplete.setOrderId(payment.getOrder().getId());
             orderComplete.setPaymentPrice(payment.getPaymentPrice());
@@ -176,6 +187,14 @@ public class OrderService {
             orderComplete.setOrderStatus(payment.getOrder().getStatus());
             orderComplete.setDeliveryDate(orderDelivery.getDeliveryDate());
             orderComplete.setDeliveryStatus(orderDelivery.getDelivertStatus());
+
+            OrderDelivery orderDelivery = orderDeliveryRepositroy.findByOrderId(payment.getOrder().getId());
+
+            if(orderDelivery != null) {
+                System.out.println(orderDelivery);
+                orderComplete.setDeliveryDate(orderDelivery.getDeliveryDate());
+                orderComplete.setDeliveryStatus(orderDelivery.getDeliveryStatus());
+            }
 
             completeList.add(orderComplete);
         });

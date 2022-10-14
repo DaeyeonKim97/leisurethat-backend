@@ -53,10 +53,12 @@ public class OrderController {
         String orderStatus = "주문 취소";
         Pageable pageable = PageRequest.of(offset, 6, Sort.by("order.id").descending());
 
-
+        int count = orderService.selectOrderCancleListCount(projectId, id, sponserName, orderStatus);
+        int pageCount = count/6;
         List<OrderInfoDTO> cancleList = orderService.selectOrderCancleList(projectId, id, sponserName, orderStatus, pageable);
 
-
+        responseMap.put("count", count);
+        responseMap.put("pageCount", pageCount);
         responseMap.put("cancleList", cancleList);
         return ResponseEntity
                 .ok()
@@ -92,7 +94,7 @@ public class OrderController {
         headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
         Map<String,Object> responseMap = new HashMap<>();
 
-        String orderStatus = "주문 대기";
+        String orderStatus = "결제 대기";
         Pageable pageable = PageRequest.of(offset, 6, Sort.by("order.id").descending());
 
 

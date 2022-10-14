@@ -21,7 +21,6 @@ import javax.persistence.*;
  * @version 1(클래스 버전)
  * @see
  */
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
