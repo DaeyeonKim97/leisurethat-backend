@@ -59,12 +59,13 @@ public class UserController {
         Pageable pageable = PageRequest.of(offset, 1, Sort.by("paymentId").descending());
 
         FundingResponseDTO fundingResponse = userService.selectFundingList(userDetails.getUsername(), pageable);
+        int fundingCount = userService.selectFundingCount(userDetails.getUsername());
         responseMap.put("fundingList", fundingResponse);
-
+        responseMap.put("fundingCount", fundingCount);
         return ResponseEntity
                 .ok()
                 .headers(headers)
-                .body(new ResponseMessage(200, "", responseMap));
+                .body(new ResponseMessage(200, "success", responseMap));
     }
 
     @GetMapping("/project")
@@ -77,9 +78,9 @@ public class UserController {
         Pageable pageable = PageRequest.of(offset, 4, Sort.by("id").descending());
 
         List<MakeProjectResponseDTO> makeProjectList = userService.selectMakerProjectList(userDetails.getUsername(), pageable);
-
+        int projectCount = userService.selectProjectCount(userDetails.getUsername());
         responseMap.put("makeProjectList", makeProjectList);
-
+        responseMap.put("projectCount", projectCount);
         return ResponseEntity
                 .ok()
                 .headers(headers)

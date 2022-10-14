@@ -13,4 +13,6 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
     public List<Project> findByBusinessInfoMemberUsername(String username);
     public List<Project> findByStatusId(int statusId, Pageable pageable);
     public int countByStatusId(int statusId);
+
+    List<Project> findAllByAccountInfoBusinessInfoMemberUsername(String username);
 }

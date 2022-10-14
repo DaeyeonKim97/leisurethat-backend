@@ -62,12 +62,21 @@ public class CalculateController {
         System.out.println(calculateAmount);
         List<DeliveryStatusCount> deliveryStatusList = calculateService.selectDeliveryStatus(projectId);
         Project projectInfo = calculateService.selectProject(projectId);
-        int excludingFees = (int) (calculateAmount.getActualAmount() * 0.95);
-        int preAmount = (int)(excludingFees * 0.8);
+        int excludingFees = 0;
+        int preAmount = 0;
 
+        if(calculateAmount != null) {
+            if(calculateAmount.getActualAmount() != null) {
+                excludingFees = (int) (calculateAmount.getActualAmount() * 0.95);
+            }
+            preAmount = (int)(excludingFees * 0.8);
+            responseMap.put("totalAmount", calculateAmount.getTotal());
+            responseMap.put("actualAmount", calculateAmount.getActualAmount());
+        } else {
+            responseMap.put("totalAmount", 0);
+            responseMap.put("actualAmount",0);
+        }
 
-        responseMap.put("totalAmount", calculateAmount.getTotal());
-        responseMap.put("actualAmount", calculateAmount.getActualAmount());
         responseMap.put("preAmount", preAmount);
         responseMap.put("postAmount", excludingFees - preAmount);
         responseMap.put("calculateList", calculateApplicationList);

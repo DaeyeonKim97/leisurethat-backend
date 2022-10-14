@@ -24,9 +24,9 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
     @Query(value = "SELECT \n" +
             "SUM(p.paymentPrice) FROM Payment p \n" +
             "WHERE p.order.project.id = :projectId \n" +
-            "AND p.order.status != '주문 취소' \n" +
+            "AND p.order.status <> '주문 취소' \n" +
             "GROUP BY(p.order.project.id)")
-    int findSumSupportAmountByProjectId(int projectId);
+    Integer findSumSupportAmountByProjectId(int projectId);
     @Query(value = "SELECT \n" +
             "COUNT(p) FROM Payment p \n" +
             "WHERE p.order.project.id = :projectId \n" +
@@ -65,4 +65,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
     int findCancleCountByOrderProjectIdAndOrderStatus(int projectId, String orderStatus);
 
     public List<Payment> findByOrderProjectId(int projectId);
+
+    List<Payment> findAllByOrderMemberUsername(String username);
 }
