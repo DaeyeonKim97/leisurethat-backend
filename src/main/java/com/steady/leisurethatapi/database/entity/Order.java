@@ -32,10 +32,11 @@ public class Order {
     private Date orderDate;
     @Column(name = "ORDER_STATUS")
     private String status;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "REWARD_ID")
     private Reward reward;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "PROJECT_ID")
     private Project project;
+
 }

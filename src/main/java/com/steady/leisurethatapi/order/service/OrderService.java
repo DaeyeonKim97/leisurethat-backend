@@ -179,14 +179,16 @@ public class OrderService {
             OrderCompleteDTO orderComplete = new OrderCompleteDTO();
 
 //            System.out.println(payment.getOrder().getId());
+            OrderDelivery orderDelivery = orderDeliveryRepositroy.findByOrderId(payment.getOrder().getId());
 
             orderComplete.setOrderId(payment.getOrder().getId());
             orderComplete.setPaymentPrice(payment.getPaymentPrice());
             orderComplete.setRewardName(payment.getOrder().getReward().getTitle());
             orderComplete.setSponserName(payment.getOrder().getMember().getName());
             orderComplete.setOrderStatus(payment.getOrder().getStatus());
+            orderComplete.setDeliveryDate(orderDelivery.getDeliveryDate());
+            orderComplete.setDeliveryStatus(orderDelivery.getDeliveryStatus());
 
-            OrderDelivery orderDelivery = orderDeliveryRepositroy.findByOrderId(payment.getOrder().getId());
 
             if(orderDelivery != null) {
                 System.out.println(orderDelivery);
