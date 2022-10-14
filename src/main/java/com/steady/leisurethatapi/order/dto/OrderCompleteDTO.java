@@ -16,7 +16,7 @@ public class OrderCompleteDTO {
     private String rewardName;
     private String deliveryStatus;
     private Date deliveryDate;
-    private int waybillId;
-    private int courierId;
+    private Long waybillId;
+    private Long courierId;
 
 }

@@ -24,7 +24,8 @@ public class OrderDetail {
             generator = "SEQ_ORDER_DETAIL_ID_GENERATOR"
     )
     @Column(name = "ORDER_DETAIL_ID")
-    private int orderDetail;
+    private int id;
+
     @Column(name = "REWARD_AMOUNT")
     private int rewardAmount;
 

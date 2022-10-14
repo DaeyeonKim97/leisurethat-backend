@@ -94,7 +94,6 @@ public class PaymentController {
         responseMap.put("project",projectRepository.findById(reward.getProject().getId()));
         responseMap.put("user",user);
         responseMap.put("delivery",deliveryRepository.findByDeliveryBasicYnAndMember("Y", user));
-
         return ResponseEntity.ok().body(new ResponseMessage(200, "success", responseMap));
     }
     @Transactional
