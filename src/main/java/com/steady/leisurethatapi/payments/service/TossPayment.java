@@ -19,17 +19,20 @@ public class TossPayment {
 
     @Value("${key.SECRET}")
     String SECRETKEY;
+
+    @Value("${key.CUSTMER}")
+    String CUSTOMER;
     //시크릿키 인코딩
 
     //예약 결제 키 발급
-    public String Authkey(String customerKey, String authKey) throws IOException, InterruptedException, ParseException {
+    public String Authkey(String authKey) throws IOException, InterruptedException, ParseException {
 
         //결제 예약키 발급 요청
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.tosspayments.com/v1/billing/authorizations/"+authKey))
                 .header("Authorization", "Basic dGVzdF9za19ENHlLZXE1YmdycG1vT2FSTHlYOEdYMGx6VzZZOg==")
                 .header("Content-Type", "application/json")
-                .method("POST", HttpRequest.BodyPublishers.ofString("{\"customerKey\":\""+customerKey+"\"}"))
+                .method("POST", HttpRequest.BodyPublishers.ofString("{\"customerKey\":\""+CUSTOMER+"\"}"))
                 .build();
 
         //응답 객체
@@ -40,11 +43,14 @@ public class TossPayment {
         Object obj = jsonParse.parse(response.body());
         JSONObject jsonObject = (JSONObject)obj;
 
+
         return (String) jsonObject.get("billingKey");
     }
 
     //결제 승인
-    public JSONObject BillingKey(String customerKey, String billingKey, int amount, String orderId, String email, String customerName,String orderName,int taxFreeAmount ) throws IOException, InterruptedException, ParseException {
+
+    public JSONObject BillingKey( String billingKey, int amount, int orderId, String email, String customerName,String orderName,Integer taxFreeAmount ) throws IOException, InterruptedException, ParseException {
+
 
         String encoderKey = Base64.getEncoder().encodeToString(SECRETKEY.getBytes());
 
@@ -55,7 +61,6 @@ public class TossPayment {
                 .header("Content-Type", "application/json")
                 .method("POST", HttpRequest.BodyPublishers.ofString("{" +
                         "\"amount\":\""+amount+"\"," +
-                        "\"customerKey\":\""+customerKey+"\"," +
                         "\"orderId\":\""+orderId+"\"," +
                         "\"customerEmail\":\""+email+"\"," +
                         "\"customerName\":\""+customerName+"\"," +
@@ -74,40 +79,5 @@ public class TossPayment {
         return jsonObject;
     }
 
-    public JSONObject paymentApproval(String customerKey,String billingKey,String orderId) throws IOException, InterruptedException, ParseException {
-
-        String encoderKey = Base64.getEncoder().encodeToString(SECRETKEY.getBytes());
-
-        int amount = 100;
-        String email = "test@mail.com";
-        String customerName = "이상우";
-        String orderName = "테스트";
-        int taxFreeAmount = 0;
-
-        // 결제 승인
-        HttpRequest approvalRequest = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.tosspayments.com/v1/billing/"+billingKey))
-                .header("Authorization","Basic "+encoderKey)
-                .header("Content-Type", "application/json")
-                .method("POST", HttpRequest.BodyPublishers.ofString("{" +
-                        "\"customerKey\":\""+customerKey+"\"," +
-                        "\"amount\":\""+amount+"\"," +
-                        "\"orderId\":\""+orderId+"\"," +
-                        "\"orderName\":\""+orderName+"\"," +
-                        "\"customerEmail\":\""+email+"\"," +
-                        "\"customerName\":\""+customerName+"\"," +
-                        "\"taxFreeAmount\":\""+taxFreeAmount+"\"" +
-                        "}"))
-                .build();
-        HttpResponse<String> response = HttpClient.newHttpClient().send(approvalRequest, HttpResponse.BodyHandlers.ofString());
-
-        // String 으로 넘어와서 json으로 변경
-        JSONParser jsonParse = new JSONParser();
-        Object obj = jsonParse.parse(response.body());
-        JSONObject jsonObject = (JSONObject)obj;
-
-        return jsonObject;
-
-    }
 
 }
