@@ -32,6 +32,7 @@ public class LoginController {
 
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginDTO loginInfo){
+        System.out.println(loginInfo);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
         Map<String,Object> responseMap = new HashMap<>();

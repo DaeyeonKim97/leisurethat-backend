@@ -1,5 +1,6 @@
 package com.steady.leisurethatapi.database.repository;
 import com.steady.leisurethatapi.calculate.dto.CalculateAmountResultDTO;
+import com.steady.leisurethatapi.database.entity.Order;
 import com.steady.leisurethatapi.database.entity.Payment;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +10,7 @@ import java.util.List;
 
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 
+    public Payment findByOrderAndCardTokenIsNotNull(Order order);
 
     public List<Payment> findAllByOrderProjectIdAndOrderStatusAndOrderIdAndOrderMemberName(int projectId, String orderStatus, int id,String sponserName, Pageable pageable);
     public List<Payment> findAllByOrderProjectIdAndOrderStatusAndOrderId(int projectId, String orderStatus, int id, Pageable pageable);
@@ -36,7 +38,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
     List<Payment> findAllByOrderMemberUsername(String username, Pageable pageable);
 
     @Query(value = "SELECT \n" +
-    "count(*) FROM Payment p \n" +
+            "count(*) FROM Payment p \n" +
             "WHERE p.order.project.id = :projectId \n" +
             "AND p.paymentStatus = :orderStatus \n" +
             "AND p.order.id = :id \n" +

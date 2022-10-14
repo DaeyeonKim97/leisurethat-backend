@@ -6,14 +6,18 @@ server:
 spring:
   datasource:
     driver-class-name: oracle.jdbc.driver.OracleDriver
+
     url: jdbc:oracle:thin:@metaverse.ohgiraffers.com:1521/xe
     username: C##LEISURETHAT_dykim
     password: leisurethat
 
   jpa:
     show-sql: true
-#    hibernate:
-#      ddl-auto: create
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
   servlet:
     multipart:
       max-file-size: 10MB
@@ -43,3 +47,10 @@ jwt:
   secret: leisurethatthatthatleisure
   access-token-validity-in-seconds: 7200 #2 hours
   refresh-token-validity-in-seconds : 43200 # 12 hours
+
+
+#Toss Secret Key
+key:
+  SECRET: "test_sk_D4yKeq5bgrpmoOaRLyX8GX0lzW6Y:"
+  CUSTMER: "test_ck_7DLJOpm5Qrl2BpO2oKe3PNdxbWnY"
+

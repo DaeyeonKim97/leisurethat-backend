@@ -56,10 +56,10 @@ public class OrderDelivery {
     private String deliveryStatus;
 
     @Column(name="COURIER_ID")
-    private int courierId;
+    private Long courierId;
 
     @Column(name="WAYBILL_ID")
-    private long waybillId;
+    private Long waybillId;
 
     @OneToOne
     @JoinColumn(name="ORDER_ID")
@@ -68,6 +68,5 @@ public class OrderDelivery {
     @ManyToOne
     @JoinColumn(name="MEMBER_ID")
     private Member member;
-
 
 }

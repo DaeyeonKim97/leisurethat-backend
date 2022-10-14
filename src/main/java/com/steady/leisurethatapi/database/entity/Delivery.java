@@ -29,7 +29,7 @@ import java.sql.Date;
 @Entity
 @Table(name = "TBL_DELIVERY")
 @SequenceGenerator(
-        name="SEQ_DELIVERY_ID_GENERATOR",
+        name = "SEQ_DELIVERY_ID_GENERATOR",
         sequenceName = "SEQ_DELIVERY_ID",
         allocationSize = 1
 )

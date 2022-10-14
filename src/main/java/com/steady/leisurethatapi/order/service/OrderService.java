@@ -185,6 +185,8 @@ public class OrderService {
             orderComplete.setRewardName(payment.getOrder().getReward().getTitle());
             orderComplete.setSponserName(payment.getOrder().getMember().getName());
             orderComplete.setOrderStatus(payment.getOrder().getStatus());
+            orderComplete.setDeliveryDate(orderDelivery.getDeliveryDate());
+            orderComplete.setDeliveryStatus(orderDelivery.getDelivertStatus());
 
             OrderDelivery orderDelivery = orderDeliveryRepositroy.findByOrderId(payment.getOrder().getId());
 
