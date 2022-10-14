@@ -152,8 +152,10 @@ public class CalculateController {
         Pageable pageable = PageRequest.of(offset, 6, Sort.by("id").descending());
 
         List<CalculateListReponseDTO> calculateList = calculateService.selectCalculateList(pageable);
+        int calculateCount = calculateService.selectCalculateCount();
 
         responseMap.put("calculateList", calculateList);
+        responseMap.put("calculateCount", calculateCount);
 
         return ResponseEntity
                 .ok()
