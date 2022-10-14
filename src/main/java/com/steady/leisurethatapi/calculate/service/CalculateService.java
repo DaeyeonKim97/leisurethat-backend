@@ -222,6 +222,13 @@ public class CalculateService {
         return calculateList;
     }
 
+    public int selectCalculateCount() {
+        List<Calculate> calculates = calculateRepository.findAll();
+
+
+        return calculates.size();
+    }
+
     public MakerInfoDTO selectMakerInfo(int id) {
 
         MakerInfoDTO makerInfo = new MakerInfoDTO();
@@ -285,6 +292,7 @@ public class CalculateService {
         return calculateList;
     }
 
+
     public CalculateProjectInfoDTO selectCalculateProjectInfoByCalculateId(int id) {
 
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
@@ -334,4 +342,5 @@ public class CalculateService {
 
         return projectRepository.findById(projectId);
     }
+
 }
